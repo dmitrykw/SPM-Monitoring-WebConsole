@@ -1,0 +1,153 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--<meta http-equiv="refresh" content="60">-->
+    <title>@ViewBag.Title - SPM Web Console</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
+
+    <link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+</head>
+<body style="background-color:#29292d" onload="setTimeout('document.location.reload();', 120000);">
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div style="position:absolute; margin:3px">
+            @Html.ActionLink("Logo", "Index", "Monitoring", null, new { @class = "mylogo" })
+        </div>
+        <div style="margin-left:80px" class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("Monitoring", "Index", "Monitoring", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <!--<li>@Html.ActionLink("Home", "Index", "Home")</li> -->
+                    <li>@Html.ActionLink("Options", "Index", "Options")</li>
+                    <li>@Html.ActionLink("About", "About", "Home")</li>
+                    <!--<li>@Html.ActionLink("Contact", "Contact", "Home")</li> -->
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="body-content">
+
+        @RenderBody()
+        <footer class="footer">
+            <p>&copy; @DateTime.Now.Year - SPM Web Console</p>
+        </footer>
+    </div>
+
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryUI")
+    @Scripts.Render("~/bundles/bootstrap")
+
+
+    <script type="text/javascript">
+
+    $(function () {
+        $.ajaxSetup({ cache: false });
+
+        $(".details_btn").click(function (e) {
+
+            e.preventDefault();
+            $.get(this.href, function (data) {
+                $('#dialogContent').html(data);
+                $('#modDialog').modal('show');
+            });
+        });
+
+        $(".sortable").sortable(
+            {
+                update: function (event, ui) {
+
+                    var IDs_string = "";
+
+                    $('.hostslist_div').children('div').each(function () {
+                        IDs_string += ($(this).attr("id")) + ","
+                    });
+
+                    IDs_string = IDs_string.substring(0, IDs_string.length - 1);
+
+                    updateSortedHosts(IDs_string)
+
+                }
+            });
+        $(".sortable").disableSelection();
+    })
+
+
+
+        function updateHostFields(myform) {
+
+            var dataToPost = {};
+
+            dataToPost.hostname = myform.elements["hostname"].value;
+            dataToPost.description = myform.elements["description"].value;
+            dataToPost.groupname = myform.elements["groupname"].value;
+            dataToPost.selectedgroupname = myform.elements["selectedgroupname"].value;
+            dataToPost.hostid = myform.elements["hostid"].value;
+            dataToPost.isnotifyenabled = myform.elements["isnotifyenabled"].checked;
+            dataToPost.isenabled = myform.elements["isenabled"].checked;
+
+            $.post("@Url.Action("Index", "Monitoring")", { model: dataToPost }, function (data) {
+                if (data.status == 0) {
+                    alert(data.message);
+                }
+            });
+        }
+
+         function updateHostPicture(myform) {
+
+            var dataToPost = {};
+
+            dataToPost.hostid = myform.elements["hostid"].value;
+            dataToPost.imgpath = myform.elements["imgpath"].value;
+
+            $.post("@Url.Action("Index", "Monitoring")", { model: dataToPost }, function (data) {
+                if (data.status == 0) {
+                    alert(data.message);
+                }
+                else {
+                    if (dataToPost.imgpath == "defaultmonitor") {
+                        setTimeout(() => { location.reload(); }, 1500);
+
+                    } else {
+                        myform.elements["imgpath"].parentElement.parentElement.parentElement.style.backgroundImage = "url('/Content/Images/" + dataToPost.imgpath + "')";
+                    }
+                }
+            });
+        }
+
+
+        function updateSortedHosts(ids_string) {
+            var dataToPost = {};
+
+            dataToPost.ids_string = ids_string;
+
+
+            $.post("@Url.Action("PostSortedIDs", "Monitoring")", { model: dataToPost }, function (data) {
+                if (data.status == 0) {
+                    alert(data.message);
+                }
+            });
+        }
+
+    </script>
+
+    @RenderSection("scripts", required: false)
+
+</body>
+    </html>

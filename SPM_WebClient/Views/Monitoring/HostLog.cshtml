@@ -1,0 +1,64 @@
+﻿@using SPM_WebClient.Models
+@{
+    ViewBag.Title = "HostLog";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<table width="100%" style="margin-left:100px;margin-top:15px">
+    <tr>
+        <td>
+            <input type="button" class="btn btn-info" value="Back" onclick="location.href='@Url.Action("Index", "Monitoring")'" />
+        </td>
+        <td>
+            <a class="scrolldown" href="#">Scroll down &darr;</a>
+        </td>
+        <td>
+            <input type="button" class="btn btn-info" value="Refresh" onclick="location.href='@Url.Action("HostLog", "Monitoring", new { id = @Model.Key})'" />
+        </td>
+    </tr>
+</table>
+<div id="hostlogpage">
+    <h2 style="text-align:center">Host Log</h2>
+
+    <div style="margin: 100px; margin-top:50px">@Html.Raw(Html.Encode(Model.Value).Replace("\n", "<br />"))</div>
+</div>
+<table width="100%" style="margin-left:100px">
+    <tr>
+        <td>      
+            <input type="button" class="btn btn-info" value="Back" onclick="location.href='@Url.Action("Index", "Monitoring")'" />            
+       </td>
+        <td>
+             <a class="scrollup" href="#">Scroll up &uarr;</a>
+        </td>
+        <td>   
+            <input type="button" class="btn btn-info" value="Refresh" onclick="location.href='@Url.Action("HostLog", "Monitoring", new { id = @Model.Key})'" />    
+        </td>
+    </tr>
+</table>
+
+
+
+@section scripts
+{
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $.ajaxSetup({ cache: false });
+            $('html, body').animate({
+                scrollTop: $(".scrollup").offset().top
+            }, 300);
+
+            $(".scrolldown").click(function () {
+                $('html, body').animate({
+                    scrollTop: $(".scrollup").offset().top
+                }, 1000);
+            });
+
+            $(".scrollup").click(function () {
+                $('html, body').animate({
+                    scrollTop: $(".scrolldown").offset().top -75
+                }, 1000);
+            });
+        });        
+    </script>
+}

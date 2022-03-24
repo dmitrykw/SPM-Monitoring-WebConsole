@@ -1,0 +1,11 @@
+docker build -t dmitrykw/spm-webconsole:win-desktop .
+#docker pull dmitrykw/spm-webconsole:win-desktop
+docker run -d -p 8000:80 --name spm-webconsole-container dmitrykw/spm-webconsole:win-desktop
+docker stop spm-webconsole-container
+docker cp D:\config.cfg spm-webconsole-container:C:\inetpub\wwwroot\Config\config.cfg
+docker start spm-webconsole-container
+
+
+
+
+SPM Monitoring system Web Console application. ASP.Net MVC Application based on IIS & .Net Framework

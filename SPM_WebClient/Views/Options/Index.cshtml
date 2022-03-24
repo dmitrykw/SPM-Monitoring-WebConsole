@@ -1,0 +1,355 @@
+﻿@using SPM_WebClient.Models
+
+@{
+    ViewBag.Title = "Options";   
+}
+<h1 class="page_title">Options</h1>
+
+<div style="color:lightgray;margin-left:150px">@Model.ConnectionErrorHeader</div>
+<div style="float:right; margin-top:-45px">
+    <div>
+        <input type="button" class="btn btn-info" value="Refresh" onclick="location.href='@Url.Action("Index", "Options")'" />
+    </div>
+</div>
+<div id="readonly_mode_word"><h3>@((Model.IsReadOnly == true) ? "ReadOnly Mode" : "")</h3></div>
+<div style="margin-left:85px;@(Model.ApiIsAvailable == false ? "display:none" : "")">
+    <form>
+        <div class="bigblock">
+            <fieldset class="groupbox" style="width: 300px;">
+                <legend class="groupbox">Interface</legend>
+                <label class="groupbox">Select hosts Visualization</label>
+
+
+                <select class="groupbox" id="hosttype" name="hosttype" style="width:103px" data-toggle="tooltip" title="Hosts representation on the Monitoring page" onchange = "updateOptionsFields(this.form);">
+                    <option value="0" @(Model.Settings.Hosts_Visual_Type == 0 ? ("selected =\"selected\"") : (""))>Big Monitor</option>
+                    <option value="1" @(Model.Settings.Hosts_Visual_Type == 1 ? ("selected =\"selected\"") : (""))>Small Monitor</option>
+                    <option value="2" @(Model.Settings.Hosts_Visual_Type == 2 ? ("selected =\"selected\"") : (""))>String</option>
+                </select>
+
+
+
+                <label class="groupbox">Select 'Monitor' Picture</label>
+
+
+                <select class="groupbox" id="hostmonitortype" name="hostmonitortype" style="margin-left:14.5px; width:103.5px" data-toggle="tooltip" title="Host 'Monitor' picture on the Monitoring page" onchange = "updateOptionsFields(this.form);">
+                    <option value="0" @(Model.Settings.Monitor_Picture_Type == 0 ? ("selected =\"selected\"") : (""))>Imac</option>
+                    <option value="1" @(Model.Settings.Monitor_Picture_Type == 1 ? ("selected =\"selected\"") : (""))>Black</option>
+                    <option value="2" @(Model.Settings.Monitor_Picture_Type == 2 ? ("selected =\"selected\"") : (""))>Metal</option>
+                    <option value="3" @(Model.Settings.Monitor_Picture_Type == 3 ? ("selected =\"selected\"") : (""))>Black Metal</option>
+                    <option value="4" @(Model.Settings.Monitor_Picture_Type == 4 ? ("selected =\"selected\"") : (""))>Scetch</option>
+                    <option value="5" @(Model.Settings.Monitor_Picture_Type == 5 ? ("selected =\"selected\"") : (""))>Gray</option>
+                    <option value="6" @(Model.Settings.Monitor_Picture_Type == 6 ? ("selected =\"selected\"") : (""))>Modern</option>
+                </select>
+
+
+            </fieldset>
+
+            <fieldset class="groupbox" style="width: 230px;">
+                <legend class="groupbox">Query Parameters</legend>
+                <div>
+                    <div style="float:left"><label class="groupbox">Hosts Query Interval</label></div>
+                    <div style="float:left" data-toggle="tooltip" title="Hosts query interval (in seconds)"><input type="text" id="hostsqueryinterval" name="hostsqueryinterval" class="form-control" style="width:30px;height:17px; padding:2px;text-align:right" value="@Model.Settings.Hosts_Query_Interval_seconds" onchange = "updateOptionsFields(this.form);"/></div>
+                    <div><label class="groupbox">sec</label></div>
+                </div>
+                <div>
+                    <div style="float:left"><label class="groupbox">ICMP TimeOut</label></div>
+                    <div style="float:left" data-toggle="tooltip" title="ICMP Timeout when host is considered unavailable (in miliseconds)"><input type="text" id="icmptimeout" name="icmptimeout" class="form-control" style="width:64px;height:17px; padding:2px;text-align:right" value="@Model.Settings.ICMP_TimeOut_miliseconds" onchange = "updateOptionsFields(this.form);"/></div>
+                    <div><label class="groupbox">ms</label></div>
+                </div>
+                <div>
+                    <div style="float:left"> <label class="groupbox">HTTP TimeOut</label></div>
+                    <div style="float:left" data-toggle="tooltip" title="HTTP Timeout when host is considered unavailable (in miliseconds)"><input type="text" id="httptimeout" name="httptimeout" class="form-control" style="width:64px;height:17px; padding:2px;margin-left:-1px;text-align:right" value="@Model.Settings.HTTP_TimeOut_miliseconds" onchange = "updateOptionsFields(this.form);" /></div>
+                    <div><label class="groupbox">ms</label></div>
+                </div>
+            </fieldset>
+
+
+            <fieldset class="groupbox" style="width: 300px;">
+                <legend class="groupbox">Connection Checking</legend>
+
+                <div style="width:192px">
+                    <div style="float:left; margin-left:10px"><input type="checkbox" id="enablecontrolhost" name="enablecontrolhost" class="form-control" checked="@Model.Settings.Enable_Query_ControlHost" onclick = "updateOptionsFields(this.form);" /></div>
+                    <div data-toggle="tooltip" title="If this 'control host' will be 'not availabe', the App will think that your internet/network connection is broken and will not to check your another hosts"><label class="groupbox">Check this 'Control host/ip'</label></div>
+                </div>
+                <div style="width:170px">
+                    <div style="margin-left:10px" data-toggle="tooltip" title="If this 'control host' will be 'not availabe', the App will think that your internet/network connection is broken and will not to check your another hosts"><input type="text" id="controlhosturi" name="controlhosturi" class="form-control" style="width:150px;height:17px; padding:2px;" value="@Model.Settings.ControlHost_URI" onchange = "updateOptionsFields(this.form);" /></div>
+                </div>
+                <div style="width:260px">
+                    <div style="float:left; margin-left:10px"><input type="checkbox" id="enablecontrolhostnotify" name="enablecontrolhostnotify" class="form-control" checked="@Model.Settings.Enable_ControlHost_Notifications" onclick = "updateOptionsFields(this.form);" /></div>
+                    <div data-toggle="tooltip" title="Send notification that the connection was lost (when it restored) using selected notification methods"><label class="groupbox">Notify when the connection is restored</label></div>
+                </div>
+            </fieldset>
+        </div>
+        <div class="bigblock">
+            <fieldset class="groupbox" style="width: 390px;">
+                <legend class="groupbox">Notifications</legend>
+                <div style="width:260px">
+                    <div style="float:left" data-toggle="tooltip" title="Number of failed ICMP attempts, after that host will be considered as unavailable (for notifications engine)"> <label class="groupbox">Number of fails before sent notification</label></div>
+                    <div data-toggle="tooltip" title="Number of failed ICMP attempts, after that host will be considered as unavailable (for notifications engine)"><input type="text" id="failsbeforenotify" name="failsbeforenotify" class="form-control" style="width:25px;height:17px; padding:2px;text-align:right" value="@Model.Settings.Number_Of_Fails_Before_Send_Notification" onchange="updateOptionsFields(this.form);" /></div>
+                </div>
+                <br />
+                <div style="width:130px">
+                    <div style="float:left; margin-left:10px"><input type="checkbox" id="notifybyemail" name="notifybyemail" class="form-control" checked="@Model.Settings.Enable_Email_Notifications" onclick="updateOptionsFields(this.form);" /></div>
+                    <div data-toggle="tooltip" title="Send Email when some hosts are fail or restored after fail"><label class="groupbox">Notify by E-mail</label></div>
+                </div>
+                <div style="width:125px">
+                    <div style="float:left; margin-left:10px"><input type="checkbox" id="notifybysms" name="notifybysms" class="form-control" checked="@Model.Settings.Enable_SMS_Notifications" onclick="updateOptionsFields(this.form);" /></div>
+                    <div data-toggle="tooltip" title="Send SMS when some hosts are fail or restored after fail"><label class="groupbox">Notify by SMS</label></div>
+                </div>
+                <div style="width:125px">
+                    <div style="float:left; margin-left:10px"><input type="checkbox" id="notifybypush" name="notifybypush" class="form-control" checked="@Model.Settings.Enable_Push_Notifications" onclick="updateOptionsFields(this.form);" /></div>
+                    <div data-toggle="tooltip" title="Send Push when some hosts are fail or restored after fail"><label class="groupbox">Notify by Push</label></div>
+                </div>
+                <div style="width:170px">
+                    <div style="float:left; margin-left:10px"><input type="checkbox" id="notifybytelegram" name="notifybytelegram" class="form-control" checked="@Model.Settings.Enable_TelegramBot_Notifications" onclick="updateOptionsFields(this.form);" /></div>
+                    <div data-toggle="tooltip" title="Send message to the Telegram when some hosts are fail or restored after fail"> <label class="groupbox">Notify by Telegram Bot</label></div>
+                </div>
+                <br />
+                <div style="width:375px">
+                    <div style="float:left; margin-left:10px"><input type="checkbox" id="notifylonganswertime" name="notifylonganswertime" class="form-control" checked="@Model.Settings.Notify_if_AnswerTime_IsLong" onclick="updateOptionsFields(this.form);" /></div>
+                    <div style="float:left" data-toggle="tooltip" title="Notify if host is responding for too long"> <label class="groupbox">Notify if Host ICMP Answer Time is more than</label></div>
+                    <div style="float:left" data-toggle="tooltip" title="Host response time in milliseconds"><input type="text" id="longanswertime" name="longanswertime" class="form-control" style="width:37px;height:17px; padding:2px;margin-left:-1px;text-align:right" value="@Model.Settings.LongAnswerTime_miliseconds" onchange="updateOptionsFields(this.form);" /></div>
+                    <div> <label class="groupbox">ms</label></div>
+                </div>
+                <div style="margin:12px">
+                    <div style="float:left; margin-top:10px; margin-right:15px" data-toggle="tooltip" title="Turn on/off notification for weekdays"> <label style="margin-left:auto; margin-right:auto;" class="groupbox">Notify on:</label></div>
+                    <div style="float:left;width:35px">
+                        <div> <label class="groupbox">Mon</label></div>
+                        <div style="margin-left:auto; margin-right:auto; width:15px" data-toggle="tooltip" title="Turn on/off the notifications on Monday"><input type="checkbox" id="notifyonmonday" name="notifyonmonday" class="form-control" checked="@Model.Settings.NotifyOnMonday" onclick="updateOptionsFields(this.form);" /></div>
+                    </div>
+                    <div style="float:left; width:35px">
+                        <div> <label class="groupbox">Tue</label></div>
+                        <div style="margin-left:auto; margin-right:auto; width:15px" data-toggle="tooltip" title="Turn on/off the notifications on Tuesday"><input type="checkbox" id="notifyontuesday" name="notifyontuesday" class="form-control" checked="@Model.Settings.NotifyOnTuesday" onclick="updateOptionsFields(this.form);" /></div>
+                    </div>
+                    <div style="float:left; width:35px">
+                        <div> <label  class="groupbox">Wed</label></div>
+                        <div style="margin-left:auto; margin-right:auto; width:15px" data-toggle="tooltip" title="Turn on/off the notifications on Wednesday"><input type="checkbox" id="notifyonwednesday" name="notifyonwednesday" class="form-control" checked="@Model.Settings.NotifyOnWednesday" onclick="updateOptionsFields(this.form);" /></div>
+                    </div>
+                    <div style="float:left;  width:35px">
+                        <div> <label class="groupbox">Thu</label></div>
+                        <div style="margin-left:auto; margin-right:auto; width:15px" data-toggle="tooltip" title="Turn on/off the notifications on Thursday"><input type="checkbox" id="notifyonthursday" name="notifyonthursday" class="form-control" checked="@Model.Settings.NotifyOnThursday" onclick="updateOptionsFields(this.form);" /></div>
+                    </div>
+                    <div style="float:left; width:35px">
+                        <div> <label class="groupbox">Fri</label></div>
+                        <div style="margin-left:auto; margin-right:auto; width:15px" data-toggle="tooltip" title="Turn on/off the notifications on Friday"><input type="checkbox" id="notifyonmfriday" name="notifyonmfriday" class="form-control" checked="@Model.Settings.NotifyOnFriday" onclick="updateOptionsFields(this.form);" /></div>
+                    </div>
+                    <div style="float:left;  width:35px">
+                        <div> <label class="groupbox">Sat</label></div>
+                        <div style="margin-left:auto; margin-right:auto; width:15px" data-toggle="tooltip" title="Turn on/off the notifications on Saturday"><input type="checkbox" id="notifyonsaturday" name="notifyonsaturday" class="form-control" checked="@Model.Settings.NotifyOnSaturday" onclick="updateOptionsFields(this.form);" /></div>
+                    </div>
+                    <div style="float:left; width:35px">
+                        <div> <label class="groupbox">Sun</label></div>
+                        <div style="margin-left:auto; margin-right:auto; width:15px" data-toggle="tooltip" title="Turn on/off the notifications on Sunday"><input type="checkbox" id="notifyonsunday" name="notifyonsunday" class="form-control" checked="@Model.Settings.NotifyOnSunday" onclick="updateOptionsFields(this.form);" /></div>
+                    </div>
+                </div>
+            </fieldset>
+
+
+
+            <fieldset class="groupbox" style="width: 300px;">
+                <legend class="groupbox">Logs</legend>
+
+                <div style="width:135px">
+                    <div style="float:left; margin-left:10px"><input type="checkbox" id="writelog" name="writelog" class="form-control" checked="@Model.Settings.Write_Hosts_Log" onclick = "updateOptionsFields(this.form);" /></div>
+                    <div data-toggle="tooltip" title="errors.txt in the program directory"><label class="groupbox">Write Errors Log</label></div>
+                </div>
+                <div style="width:277px">
+                    <div style="float:left; margin-left:10px"><input type="checkbox" id="writelogforeachhost" name="writelogforeachhost" class="form-control" checked="@Model.Settings.Write_Log_For_Each_Host" onclick = "updateOptionsFields(this.form);" /></div>
+                    <div data-toggle="tooltip" title="Its contained in the hosts-logs folder in the program directory"><label class="groupbox">Write Errors Log for each host separately</label></div>
+                </div>
+            </fieldset>
+
+
+        </div>
+
+
+
+        <fieldset class="groupbox" style="width: 500px;">
+            <legend class="groupbox">SPM Monitoring Agent</legend>
+
+            <fieldset class="groupbox" style="width: 460px;">
+                <legend class="included_groupbox">Host Data Notifications</legend>
+
+
+                <div style="width:375px">
+                    <div style="float:left" data-toggle="tooltip" title="Time during that measurements are taken and average values are calculated"> <label class="groupbox">Measures time before send notifications</label></div>
+                    <div style="float:left" data-toggle="tooltip" title="Time during that measurements are taken and average values are calculated"><input type="text" id="agentmeasurestime" name="agentmeasurestime" class="form-control" style="width:25px;height:17px; padding:2px;margin-left:-1px;text-align:right" value="@Model.Settings.Agent_Measure_Time_Before_Sent_Notifications_minutes" onchange="updateOptionsFields(this.form);" /></div>
+                    <div> <label class="groupbox">min</label></div>
+                </div>
+                <br />
+
+                <div style="width:375px">
+                    <div style="float:left; margin-left:10px"><input type="checkbox" id="notifycpuoverload" name="notifycpuoverload" class="form-control" checked="@Model.Settings.Agent_Notify_if_CPU_is_Overload" onclick="updateOptionsFields(this.form);" /></div>
+                    <div style="float:left" data-toggle="tooltip" title="Notify when host CPU is overloaded"> <label class="groupbox">Notify when host CPU is overloaded more than</label></div>
+                    <div style="float:left" data-toggle="tooltip" title="Notify when host CPU is overloaded"><input type="text" id="notifycpuoverloadpercent" name="notifycpuoverloadpercent" class="form-control" style="width:27px;height:17px; padding:2px;margin-left:-1px" value="@Model.Settings.Agent_CPU_Overload_Percent" onchange="updateOptionsFields(this.form);" /></div>
+                    <div> <label class="groupbox">%</label></div>
+                </div>
+                <div style="width:375px">
+                    <div style="float:left; margin-left:10px"><input type="checkbox" id="notifylowfreemem" name="notifylowfreemem" class="form-control" checked="@Model.Settings.Agent_Notify_if_LowFreeMem" onclick="updateOptionsFields(this.form);" /></div>
+                    <div style="float:left" data-toggle="tooltip" title="Notify when host Free memory is low"> <label class="groupbox">Notify when host Free Memory is lower than</label></div>
+                    <div style="float:left" data-toggle="tooltip" title="Notify when host Free memory is low"><input type="text" id="notifylowfreememmegabytes" name="notifylowfreememmegabytes" class="form-control" style="width:50px;height:17px; padding:2px;margin-left:-1px;text-align:right" value="@Model.Settings.Agent_LowFreeMem_Megabytes" onchange="updateOptionsFields(this.form);" /></div>
+                    <div> <label class="groupbox">Mb</label></div>
+                </div>
+                <div style="width:405px">
+                    <div style="float:left; margin-left:10px"><input type="checkbox" id="notifylowdisksspace" name="notifylowdisksspace" class="form-control" checked="@Model.Settings.Agent_Notify_LowDisksFreeSpace" onclick="updateOptionsFields(this.form);" /></div>
+                    <div style="float:left" data-toggle="tooltip" title="Notify when free space on some Disk on some host is low"> <label class="groupbox">Notify when host Disks free space is lower than</label></div>
+                    <div style="float:left" data-toggle="tooltip" title="Notify when free space on some Disk on some host is low"><input type="text" id="notifylowdisksspacemegabytes" name="notifylowdisksspacemegabytes" class="form-control" style="width:50px;height:17px; padding:2px;margin-left:-1px; text-align:right" value="@Model.Settings.Agent_LowDisksFreeSpace_Megabytes" onchange="updateOptionsFields(this.form);" /></div>
+                    <div> <label class="groupbox">Mb</label></div>
+                </div>
+
+                <div style="width:375px">
+                    <div style="float:left; margin-left:10px"><input type="checkbox" id="notifydisksoverload" name="notifydisksoverload" class="form-control" checked="@Model.Settings.Agent_Notify_if_Disks_Overload" onclick="updateOptionsFields(this.form);" /></div>
+                    <div style="float:left" data-toggle="tooltip" title="Notify when on some Disk on some host is overloaded"> <label class="groupbox">Notify when host Disks are overloaded more than</label></div>
+                    <div style="float:left" data-toggle="tooltip" title="Notify when on some Disk on some host is overloaded"><input type="text" id="notifydisksoverloadpercent" name="notifydisksoverloadpercent" class="form-control" style="width:27px;height:17px; padding:2px;margin-left:-1px" value="@Model.Settings.Agent_DisksOverload_Percent" onchange="updateOptionsFields(this.form);" /></div>
+                    <div> <label class="groupbox">%</label></div>
+                </div>
+
+                <div style="width:445px">
+                    <div style="float:left; margin-left:10px"><input type="checkbox" id="notifynetoverload" name="notifynetoverload" class="form-control" checked="@Model.Settings.Agent_Notify_if_NetAdapters_Overload" onclick="updateOptionsFields(this.form);" /></div>
+                    <div style="float:left" data-toggle="tooltip" title="Notify when on some Network adapter on some host is overloaded"> <label class="groupbox">Notify when host Network Adapters are overloaded more than</label></div>
+                    <div style="float:left" data-toggle="tooltip" title="Notify when on some Network adapter on some host is overloaded"><input type="text" id="notifynetoverloadpercent" name="notifynetoverloadpercent" class="form-control" style="width:27px;height:17px; padding:2px;margin-left:-1px" value="@Model.Settings.Agent_NetAdaptersOverload_Percent" onchange="updateOptionsFields(this.form);" /></div>
+                    <div> <label class="groupbox">%</label></div>
+                </div>
+
+                <div style="width:310px; margin-top:10px">
+                    <div style="float:left; margin-left:10px"><input type="checkbox" id="notifyagentlost" name="notifyagentlost" class="form-control" checked="@Model.Settings.Agent_Notify_AgentConnectionLost" onclick="updateOptionsFields(this.form);" /></div>
+                    <div data-toggle="tooltip" title="Notify when Agent Service on some host have connection error"> <label class="groupbox">Notify when Agent Service have connection error</label></div>                                        
+                </div>
+            </fieldset>
+
+            <fieldset class="groupbox" style="width: 410px;">
+                <legend class="included_groupbox">Windows-Hosts EventLog forwarding</legend>
+
+
+                <div style="width:260px">
+                    <div style="float:left; margin-left:10px"><input type="checkbox" id="notifyhostrestarted" name="notifyhostrestarted" class="form-control" checked="@Model.Settings.EventLOG_Notify_if_ComputerRestarted" onclick = "updateOptionsFields(this.form);" /></div>
+                    <div data-toggle="tooltip" title="Notify if some host has been restarted"><label class="groupbox">Notify if some host has been restarted</label></div>
+                </div>
+                <div style="width:335px">
+                    <div style="float:left; margin-left:10px"><input type="checkbox" id="notifyhostgoingreboot" name="notifyhostgoingreboot" class="form-control" checked="@Model.Settings.EventLOG_Notify_if_ComputerGoingReboot" onclick = "updateOptionsFields(this.form);" /></div>
+                    <div data-toggle="tooltip" title="Notify when some host is going to shutdown/reboot"><label class="groupbox">Notify when some host is going to shutdown/reboot</label></div>
+                </div>
+                <div style="width:385px">
+                    <div style="float:left; margin-left:10px"><input type="checkbox" id="notifyrebootbyuser" name="notifyrebootbyuser" class="form-control" checked="@Model.Settings.EventLOG_Notify_if_ComputerRebootedByUser" onclick = "updateOptionsFields(this.form);" /></div>
+                    <div data-toggle="tooltip" title="Notify if previous shudown/reboot has been initiated by user"><label class="groupbox">Notify if previous shutdown/reboot has been initiated by user</label></div>
+                </div>
+                <br />
+                <div style="width:223px">
+                    <div style="float:left; margin-left:10px"><input type="checkbox" id="forwardcriticalevents" name="forwardcriticalevents" class="form-control" checked="@Model.Settings.EventLOG_ForwardCriticalEvents" onclick = "updateOptionsFields(this.form);" /></div>
+                    <div data-toggle="tooltip" title="Forward all Events with Critical Level from System Log"><label class="groupbox">Forward Critical System Events</label></div>
+                </div>
+                <div style="width:210px">
+                    <div style="float:left; margin-left:10px"><input type="checkbox" id="forwarderrorevents" name="forwarderrorevents" class="form-control" checked="@Model.Settings.EventLOG_ForwardErrorEvents" onclick = "updateOptionsFields(this.form);" /></div>
+                    <div data-toggle="tooltip" title="Forward all Events with Error Level from System Log"><label class="groupbox">Forward Error System Events</label></div>
+                </div>
+
+            </fieldset>
+
+
+        </fieldset>
+    </form>
+
+
+</div>
+
+
+@section scripts
+{
+    <script type="text/javascript">
+
+
+        $(function () {
+            $.ajaxSetup({ cache: false });
+
+            //Autohide and disable field
+            AutoDisableFields();
+
+
+            //ToolTips
+            $('[data-toggle="tooltip"]').tooltip({
+                placement: 'top',
+                delay: { show: 300, hide: 100 }
+            });
+
+        })
+
+        function updateOptionsFields(myform) {
+
+             //Autohide and disable field
+            AutoDisableFields()
+
+            var dataToPost = {};
+
+            dataToPost.hosttype = myform.elements["hosttype"].value;
+            dataToPost.hostmonitortype = myform.elements["hostmonitortype"].value;
+
+            dataToPost.hostsqueryinterval = myform.elements["hostsqueryinterval"].value;
+
+            dataToPost.icmptimeout = myform.elements["icmptimeout"].value;
+            dataToPost.httptimeout = myform.elements["httptimeout"].value;
+            dataToPost.enablecontrolhost = myform.elements["enablecontrolhost"].checked;
+            dataToPost.controlhosturi = myform.elements["controlhosturi"].value;
+            dataToPost.enablecontrolhostnotify = myform.elements["enablecontrolhostnotify"].checked;
+            dataToPost.failsbeforenotify = myform.elements["failsbeforenotify"].value;
+            dataToPost.notifybyemail = myform.elements["notifybyemail"].checked;
+            dataToPost.notifybysms = myform.elements["notifybysms"].checked;
+            dataToPost.notifybypush = myform.elements["notifybypush"].checked;            
+            dataToPost.notifybytelegram = myform.elements["notifybytelegram"].checked;
+
+            dataToPost.notifylonganswertime = myform.elements["notifylonganswertime"].checked;
+            dataToPost.longanswertime = myform.elements["longanswertime"].value;
+
+            dataToPost.writelog = myform.elements["writelog"].checked;
+            dataToPost.writelogforeachhost = myform.elements["writelogforeachhost"].checked;
+
+            dataToPost.agentmeasurestime = myform.elements["agentmeasurestime"].value;
+            dataToPost.notifycpuoverload = myform.elements["notifycpuoverload"].checked;
+            dataToPost.notifycpuoverloadpercent = myform.elements["notifycpuoverloadpercent"].value;
+            dataToPost.notifylowfreemem = myform.elements["notifylowfreemem"].checked;
+            dataToPost.notifylowfreememmegabytes = myform.elements["notifylowfreememmegabytes"].value;
+            dataToPost.notifylowdisksspace = myform.elements["notifylowdisksspace"].checked;
+            dataToPost.notifylowdisksspacemegabytes = myform.elements["notifylowdisksspacemegabytes"].value;
+            dataToPost.notifydisksoverload = myform.elements["notifydisksoverload"].checked;
+            dataToPost.notifydisksoverloadpercent = myform.elements["notifydisksoverloadpercent"].value;
+            dataToPost.notifynetoverload = myform.elements["notifynetoverload"].checked;
+            dataToPost.notifynetoverloadpercent = myform.elements["notifynetoverloadpercent"].value;
+
+            dataToPost.notifyagentlost = myform.elements["notifyagentlost"].checked;            
+
+            dataToPost.notifyhostrestarted = myform.elements["notifyhostrestarted"].checked;
+            dataToPost.notifyhostgoingreboot = myform.elements["notifyhostgoingreboot"].checked;
+            dataToPost.notifyrebootbyuser = myform.elements["notifyrebootbyuser"].checked;
+            dataToPost.forwardcriticalevents = myform.elements["forwardcriticalevents"].checked;
+            dataToPost.forwarderrorevents = myform.elements["forwarderrorevents"].checked;
+
+            dataToPost.notifyonmonday = myform.elements["notifyonmonday"].checked;
+            dataToPost.notifyontuesday = myform.elements["notifyontuesday"].checked;
+            dataToPost.notifyonwednesday = myform.elements["notifyonwednesday"].checked;
+            dataToPost.notifyonthursday = myform.elements["notifyonthursday"].checked;
+            dataToPost.notifyonmfriday = myform.elements["notifyonmfriday"].checked;
+            dataToPost.notifyonsaturday = myform.elements["notifyonsaturday"].checked;
+            dataToPost.notifyonsunday = myform.elements["notifyonsunday"].checked;
+                        
+
+                $.post("@Url.Action("Index", "Options")", { model: dataToPost }, function (data) {
+                    if (data.status == 0) {
+                        alert(data.message);
+                    }
+                });
+        }
+
+        function AutoDisableFields() {
+
+            //Autohdisable field        
+            if ($("#enablecontrolhost").is(":checked")) { $("#controlhosturi").prop("readonly", false); $("#enablecontrolhostnotify").prop("disabled", false); } else { $("#controlhosturi").prop("readonly", true); $("#enablecontrolhostnotify").prop("disabled", true); }
+            if ($("#notifylonganswertime").is(":checked")) { $("#longanswertime").prop("readonly", false); } else { $("#longanswertime").prop("readonly", true); }
+            if ($("#notifycpuoverload").is(":checked")) { $("#notifycpuoverloadpercent").prop("readonly", false); } else { $("#notifycpuoverloadpercent").prop("readonly", true); }
+            if ($("#notifylowfreemem").is(":checked")) { $("#notifylowfreememmegabytes").prop("readonly", false); } else { $("#notifylowfreememmegabytes").prop("readonly", true); }
+            if ($("#notifylowdisksspace").is(":checked")) { $("#notifylowdisksspacemegabytes").prop("readonly", false); } else { $("#notifylowdisksspacemegabytes").prop("readonly", true); }
+            if ($("#notifydisksoverload").is(":checked")) { $("#notifydisksoverloadpercent").prop("readonly", false); } else { $("#notifydisksoverloadpercent").prop("readonly", true); }
+            if ($("#notifynetoverload").is(":checked")) { $("#notifynetoverloadpercent").prop("readonly", false); } else { $("#notifynetoverloadpercent").prop("readonly", true); }
+              
+        }
+
+    </script>
+}
