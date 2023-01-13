@@ -7,8 +7,7 @@ using System.Web;
 namespace SPM_WebClient.Models
 {
     public class UpdateHostObj 
-    { 
-    
+    {        
         public string hostname { get; set; }
         public string description { get; set; }
         public string groupname { get; set; }
@@ -70,6 +69,10 @@ namespace SPM_WebClient.Models
 
     public class Host
     {
+        private const string css_bootstrap_progress_red = "progress-bar bg-danger";
+        private const string css_bootstrap_progress_yellow = "progress-bar bg-warning";
+        private const string css_bootstrap_progress_green = "progress-bar bg-success";
+
         public string HostCaptionMessage
         {
             get
@@ -175,11 +178,11 @@ namespace SPM_WebClient.Models
             get
             {
                 if (CpuLoad > 85)
-                { return "progress-bar-danger"; }
+                { return css_bootstrap_progress_red; }
                 else if (CpuLoad > 60)
-                { return "progress-bar-warning"; }
+                { return css_bootstrap_progress_yellow; }
                 else
-                { return "progress-bar-success"; }
+                { return css_bootstrap_progress_green; }
             }
         }
 
@@ -198,11 +201,11 @@ namespace SPM_WebClient.Models
             get
             {
                 if (UsedMemory_Percent > 85)
-                { return "progress-bar-danger"; }
+                { return css_bootstrap_progress_red; }
                 else if (UsedMemory_Percent > 60)
-                { return "progress-bar-warning"; }
+                { return css_bootstrap_progress_yellow; }
                 else
-                { return "progress-bar-success"; }
+                { return css_bootstrap_progress_green; }
             }
         }
 

@@ -7,6 +7,10 @@ namespace SPM_WebClient.Models
 {
     public class LogicalDisc
     {
+        private const string css_bootstrap_progress_red = "progress-bar progress-bar-striped bg-danger";
+        private const string css_bootstrap_progress_yellow = "progress-bar progress-bar-striped bg-warning";
+        private const string css_bootstrap_progress_green = "progress-bar progress-bar-striped bg-success";
+
         public string Name { get; set; }
         public double TotalSpace { get; set; }
         public string TotalSpaceString
@@ -40,11 +44,11 @@ namespace SPM_WebClient.Models
             get
             {
                 if (LoadPercent > 85)
-                { return "progress-bar-danger"; }
+                { return css_bootstrap_progress_red; }
                 else if (LoadPercent > 60)
-                { return "progress-bar-warning"; }
+                { return css_bootstrap_progress_yellow; }
                 else
-                { return "progress-bar-success"; }
+                { return css_bootstrap_progress_green; }
             }
         }
 
@@ -63,11 +67,11 @@ namespace SPM_WebClient.Models
             get
             {
                 if (UsedSpace_Percent > 85)
-                { return "progress-bar-danger"; }
+                { return css_bootstrap_progress_red; }
                 else if (UsedSpace_Percent > 60)
-                { return "progress-bar-warning"; }
+                { return css_bootstrap_progress_yellow; }
                 else
-                { return "progress-bar-success"; }
+                { return css_bootstrap_progress_green; }
             }
         }
 

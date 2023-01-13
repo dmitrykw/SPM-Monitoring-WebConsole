@@ -11,6 +11,14 @@
 </div>
 <div style="color:lightgray;margin-left:150px">@Model.ConnectionErrorHeader</div>
 <div style="float:right; margin-top:-45px">
+
+    <div style="float:left;margin-top:10px; margin-right:70px">
+
+        <div style="float:left"><input type="submit" value="" class="btn btn-info btn-sm" style="height:17px; padding-top: 1px" onclick="SwitchShowHideControls();" /> </div>
+        <div style="float: left; color: #a1a1a3; margin:1px; margin-left:5px"><p id="ShowHideLabelText">Swith to Less Controls</p></div>
+
+    </div>
+
     <div style="float:left;margin-top:10px; margin-right:70px">
         @using (Html.BeginForm("SetCookie", "Monitoring", FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
@@ -18,15 +26,15 @@
             <input type="hidden" name="cookie_name" value="ShowHostsFilterLevel" />
             <input type="hidden" name="cookie_value" value="@(Model.ShowHostsFilterLevel == 0 ? "1" : (Model.ShowHostsFilterLevel == 1 ? "2" : "0"))" />
 
-            <div style="float:left"><input type="submit" value="" class="@(Model.ShowHostsFilterLevel == 0 ? "btn btn-success btn-sm" : (Model.ShowHostsFilterLevel == 1 ? "btn btn-warning btn-sm" : "btn btn-danger btn-sm"))" style="height:20px; padding-top: 1px" /></div>
-            <div style="float: left; color: #a1a1a3; margin:1px; margin-left:5px"> <p>@(Model.ShowHostsFilterLevel == 0 ? "Show All hosts" : (Model.ShowHostsFilterLevel == 1 ? "Show Failed hosts and hosts with active notifications" : "Show Failed hosts only"))</p></div>
+            <div style="float:left"><input type="submit" value="" class="@(Model.ShowHostsFilterLevel == 0 ? "btn btn-success btn-sm" : (Model.ShowHostsFilterLevel == 1 ? "btn btn-warning btn-sm" : "btn btn-danger btn-sm"))" style="height:17px; padding-top: 1px" /></div>
+            <div style="float: left; color: #a1a1a3; margin:1px; margin-left:5px"> <p>@(Model.ShowHostsFilterLevel == 0 ? "Now Showing All hosts" : (Model.ShowHostsFilterLevel == 1 ? "Now Showing Failed hosts and hosts with active notifications" : "Now Showing Failed hosts only"))</p></div>
         }
     </div>
     <div style="float:left;margin-top:5px">
         @using (Html.BeginForm("Search", "Monitoring", FormMethod.Get, new { enctype = "multipart/form-data" }))
         {
             <div style="float:left"><input type="search" value="@Model.SearchFieldText" name="search_filter" , class="form-control searchtext" placeholder="Search host" style="height:25px; padding-top: 5px" /></div>
-            <div style="float:left"><input type="submit" value="Search" class="btn btn-warning" style="height:25px; padding-top: 1px" /></div>
+            <div style="float:left;margin-left:5px"><input type="submit" value="Search" class="btn btn-warning" style="height:25px; padding-top: 0px; margin-bottom:5px" /></div>
         }
     </div>
     <div style="float:left; margin-left:100px">
@@ -35,7 +43,7 @@
 </div>
     <div id="readonly_mode_word"><h3>@((Model.IsReadOnly == true) ? "ReadOnly Mode" : "")</h3></div>
     <div>               
-        <div id="@(Model.Groups.Count > 12 ? "btns_absolute": "btns_fixed")">
+        <div class="controls" id="@(Model.Groups.Count > 12 ? "btns_absolute": "btns_fixed")">
             <div style="float:left">
                 @using (Html.BeginForm("AddHost", "Monitoring", FormMethod.Post, new { enctype = "multipart/form-data" }))
                 {
@@ -59,7 +67,7 @@
                 }
             </div>
         </div>
-        <div name="GroupsList" id="@(Model.Groups.Count > 12 ? "groups_absolute": "groups_fixed")">
+        <div class="controls"name="GroupsList" id="@(Model.Groups.Count > 12 ? "groups_absolute": "groups_fixed")">
             <div style="text-align:center; color:#a1a1a3">
                 <h3><b>@Model.GroupsHeader</b></h3>
             </div>
@@ -76,7 +84,7 @@
                 <div class="monitoring_host_div_stringview" id="@curr_host.ID">
                     <form>
 
-                        <div class="monitoring_host_status_checkbox_stringview">@Html.CheckBoxFor(Model => curr_host.Status, new { Name = "status", id = "status" }) </div>
+                        <!--<div class="monitoring_host_status_checkbox_stringview">@Html.CheckBoxFor(Model => curr_host.Status, new { Name = "status", id = "status" }) </div>-->
                         <div class="monitoring_host_hostname_stringview @((curr_host.IsEnabled) ? (curr_host.Status ? (curr_host.StatusText.Contains("TO LONG") ? "monitoring_host_orange" : "monitoring_host_green") : "monitoring_host_red") : "monitoring_host_black")">@Html.TextBoxFor(Model => curr_host.Hostname, new { Class = "textboxstyle", Style = "width:145px", Name = "hostname", id = "hostname", placeholder = "hostname/ip", onchange = "updateHostFields(this.form);" })</div>
                         <div class="monitoring_host_description_stringview @((curr_host.IsEnabled) ? (curr_host.Status ? (curr_host.StatusText.Contains("TO LONG") ? "monitoring_host_orange" : "monitoring_host_green") : "monitoring_host_red") : "monitoring_host_black")">@Html.TextBoxFor(Model => curr_host.Description, new { Class = "textboxstyle", Style = "width:145px", Name = "description", id = "description", placeholder = "host description", onchange = "updateHostFields(this.form);" })</div>
                         <div class="monitoring_host_group_stringview @((curr_host.IsEnabled) ? (curr_host.Status ? (curr_host.StatusText.Contains("TO LONG") ? "monitoring_host_orange" : "monitoring_host_green") : "monitoring_host_red") : "monitoring_host_black")">@Html.TextBoxFor(Model => curr_host.GroupName, new { Class = "textboxstyle", Style = "width:123px", Name = "groupname", id = "groupname", placeholder = "host groupname", onchange = "updateHostFields(this.form);" })</div>
@@ -145,8 +153,8 @@
                 $('.group_button_selected').tooltip({ animation: true, placement: "right", delay: { show: 1000, hide: 300 } });
             })
 
-            
-        
+
+
 
 
         </script>

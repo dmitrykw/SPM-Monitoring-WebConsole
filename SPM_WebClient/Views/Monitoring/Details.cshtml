@@ -1,20 +1,22 @@
 ﻿@using SPM_WebClient.Models
 @model SPM_WebClient.Models.Host
 
-<div class="modal-content">
-    <div class="modal-header">
-        <button class="close" data-dismiss="modal" area-hidden="true">X</button>
-        <h4 style="text-align:center">@Html.DisplayFor(model => model.Hostname)</h4>
-        <table align="center">
-            <tr>
-                <td>
-                    <h6 id="hostcaptionmessage" class="@Model.HostCaptionMessage_CSSClass">@Html.DisplayFor(model => model.HostCaptionMessage)</h6>
-                </td>
-                <td style="">
-                    <h6 id="agentversion" class="@Model.HostCaptionMessage_CSSClass" style="font-size:9px;margin-top:5px; margin-left:5px">@Html.DisplayFor(model => model.AgentVersion)</h6>
-                </td>
-            </tr>
-        </table>
+<div class="modal-content" style="width:550px">
+    <div class="modal-header" style="display:inline-block">
+        <div class="modal-title">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="float:right"></button>
+            <h4 style="text-align:center">@Html.DisplayFor(model => model.Hostname)</h4>
+            <table align="center">
+                <tr>
+                    <td>
+                        <h6 id="hostcaptionmessage" class="@Model.HostCaptionMessage_CSSClass">@Html.DisplayFor(model => model.HostCaptionMessage)</h6>
+                    </td>
+                    <td style="">
+                        <h6 id="agentversion" class="@Model.HostCaptionMessage_CSSClass" style="font-size:9px;margin-top:5px; margin-left:5px">@Html.DisplayFor(model => model.AgentVersion)</h6>
+                    </td>
+                </tr>
+            </table>
+        </div>        
     </div>
     <div class="modal-body">
         <div style="display:none" id="hosttype">@Model.HostType</div>
@@ -105,38 +107,38 @@
 
             <div style="margin-left:10px" id="customweekdaysdiv">
                 <p>
-                    <div style="float:left"><input type="checkbox" id="isenabledcustomscheduling" name="isenabledcustomscheduling" class="form-control" onclick="updateCustomFields(this.form);" /></div>
-                    <div style="width:230px" class="isenabledcustomscheduling"><label class="groupbox">Use custom notification scheduling</label></div>
+                    <div style="float:left"><input type="checkbox" id="isenabledcustomscheduling" name="isenabledcustomscheduling" class="form-check-input mt-2" onclick="updateCustomFields(this.form);" /></div>
+                    <div class="isenabledcustomscheduling"><label class="groupbox">Use custom notification scheduling</label></div>
                 </p>
                 <div style="margin-left: 10px" id="weekdaysitesmdiv">
                     <div id="weekdaylabeldiv" style="float:left; margin-top:10px; margin-right:15px"> <label style="margin-left:auto; margin-right:auto;" class="groupbox">Notify on:</label></div>
                     <div style="float:left;width:35px">
                         <div> <label class="groupbox">Mon</label></div>
-                        <div style="margin-left:auto; margin-right:auto; width:15px"><input type="checkbox" id="notifyonmonday" name="notifyonmonday" class="form-control" checked="@Model.HostCustomWeekDays.Where(x => x.Key == "Monday").FirstOrDefault().Value" onclick="updateCustomFields(this.form);" /></div>
+                        <div style="margin-left:auto; margin-right:auto; width:15px"><input type="checkbox" id="notifyonmonday" name="notifyonmonday" class="form-check-input mt-2" checked="@Model.HostCustomWeekDays.Where(x => x.Key == "Monday").FirstOrDefault().Value" onclick="updateCustomFields(this.form);" /></div>
                     </div>
                     <div style="float:left; width:35px">
                         <div> <label class="groupbox">Tue</label></div>
-                        <div style="margin-left:auto; margin-right:auto; width:15px"><input type="checkbox" id="notifyontuesday" name="notifyontuesday" class="form-control" checked="@Model.HostCustomWeekDays.Where(x => x.Key == "Tuesday").FirstOrDefault().Value" onclick="updateCustomFields(this.form);" /></div>
+                        <div style="margin-left:auto; margin-right:auto; width:15px"><input type="checkbox" id="notifyontuesday" name="notifyontuesday" class="form-check-input mt-2" checked="@Model.HostCustomWeekDays.Where(x => x.Key == "Tuesday").FirstOrDefault().Value" onclick="updateCustomFields(this.form);" /></div>
                     </div>
                     <div style="float:left; width:35px">
                         <div> <label class="groupbox">Wed</label></div>
-                        <div style="margin-left:auto; margin-right:auto; width:15px"><input type="checkbox" id="notifyonwednesday" name="notifyonwednesday" class="form-control" checked="@Model.HostCustomWeekDays.Where(x => x.Key == "Wednesday").FirstOrDefault().Value" onclick="updateCustomFields(this.form);" /></div>
+                        <div style="margin-left:auto; margin-right:auto; width:15px"><input type="checkbox" id="notifyonwednesday" name="notifyonwednesday" class="form-check-input mt-2" checked="@Model.HostCustomWeekDays.Where(x => x.Key == "Wednesday").FirstOrDefault().Value" onclick="updateCustomFields(this.form);" /></div>
                     </div>
                     <div style="float:left;  width:35px">
                         <div> <label class="groupbox">Thu</label></div>
-                        <div style="margin-left:auto; margin-right:auto; width:15px"><input type="checkbox" id="notifyonthursday" name="notifyonthursday" class="form-control" checked="@Model.HostCustomWeekDays.Where(x => x.Key == "Thursday").FirstOrDefault().Value" onclick="updateCustomFields(this.form);" /></div>
+                        <div style="margin-left:auto; margin-right:auto; width:15px"><input type="checkbox" id="notifyonthursday" name="notifyonthursday" class="form-check-input mt-2" checked="@Model.HostCustomWeekDays.Where(x => x.Key == "Thursday").FirstOrDefault().Value" onclick="updateCustomFields(this.form);" /></div>
                     </div>
                     <div style="float:left; width:35px">
                         <div> <label class="groupbox">Fri</label></div>
-                        <div style="margin-left:auto; margin-right:auto; width:15px"><input type="checkbox" id="notifyonmfriday" name="notifyonmfriday" class="form-control" checked="@Model.HostCustomWeekDays.Where(x => x.Key == "Friday").FirstOrDefault().Value" onclick="updateCustomFields(this.form);" /></div>
+                        <div style="margin-left:auto; margin-right:auto; width:15px"><input type="checkbox" id="notifyonmfriday" name="notifyonmfriday" class="form-check-input mt-2" checked="@Model.HostCustomWeekDays.Where(x => x.Key == "Friday").FirstOrDefault().Value" onclick="updateCustomFields(this.form);" /></div>
                     </div>
                     <div style="float:left;  width:35px">
                         <div> <label class="groupbox">Sat</label></div>
-                        <div style="margin-left:auto; margin-right:auto; width:15px"><input type="checkbox" id="notifyonsaturday" name="notifyonsaturday" class="form-control" checked="@Model.HostCustomWeekDays.Where(x => x.Key == "Saturday").FirstOrDefault().Value" onclick="updateCustomFields(this.form);" /></div>
+                        <div style="margin-left:auto; margin-right:auto; width:15px"><input type="checkbox" id="notifyonsaturday" name="notifyonsaturday" class="form-check-input mt-2" checked="@Model.HostCustomWeekDays.Where(x => x.Key == "Saturday").FirstOrDefault().Value" onclick="updateCustomFields(this.form);" /></div>
                     </div>
                     <div style="float:left; width:35px">
                         <div> <label class="groupbox">Sun</label></div>
-                        <div style="margin-left:auto; margin-right:auto; width:15px"><input type="checkbox" id="notifyonsunday" name="notifyonsunday" class="form-control" checked="@Model.HostCustomWeekDays.Where(x => x.Key == "Sunday").FirstOrDefault().Value" onclick="updateCustomFields(this.form);" /></div>
+                        <div style="margin-left:auto; margin-right:auto; width:15px"><input type="checkbox" id="notifyonsunday" name="notifyonsunday" class="form-check-input mt-2" checked="@Model.HostCustomWeekDays.Where(x => x.Key == "Sunday").FirstOrDefault().Value" onclick="updateCustomFields(this.form);" /></div>
                     </div>
                     <div style="clear: both;"></div>
                 </div>
@@ -144,48 +146,47 @@
 
             <div style="margin-left:10px" id="customoptionsdiv">
                 <p>
-                    <div style="float:left"><input type="checkbox" id="isenabledcustomnotificationsettings" name="isenabledcustomnotificationsettings" class="form-control" checked="@Model.HostCustomOptions.Where(x => x.Key == "isEnabledCustomNotificationSettings").FirstOrDefault().Value" onclick="updateCustomFields(this.form);" /></div>
+                    <div style="float:left"><input type="checkbox" id="isenabledcustomnotificationsettings" name="isenabledcustomnotificationsettings" class="form-check-input mt-2" checked="@Model.HostCustomOptions.Where(x => x.Key == "isEnabledCustomNotificationSettings").FirstOrDefault().Value" onclick="updateCustomFields(this.form);" /></div>
                     <div class="isenabledcustomnotificationsettings"><label class="groupbox">Use custom notification settings for this host (CPU, mem, etc.)</label></div>
                 </p>
                 <div id="agentitemsdiv">
 
                     <ul type="none" style="padding:0; margin-left:10px">
                         <li>
-                            <div style="float:left"><input type="checkbox" id="customagentnotifyifcpuisoverload" name="customagentnotifyifcpuisoverload" class="form-control" checked="@Model.HostCustomOptions.Where(x => x.Key == "Custom_Agent_Notify_if_CPU_is_Overload").FirstOrDefault().Value" onclick="updateCustomFields(this.form);" /></div>
+                            <div style="float:left"><input type="checkbox" id="customagentnotifyifcpuisoverload" name="customagentnotifyifcpuisoverload" class="form-check-input mt-2" checked="@Model.HostCustomOptions.Where(x => x.Key == "Custom_Agent_Notify_if_CPU_is_Overload").FirstOrDefault().Value" onclick="updateCustomFields(this.form);" /></div>
                             <div class="customagentnotifyifcpuisoverload" style="float:left"><label class="groupbox">Notify when host CPU is overloaded more than</label></div>
-                            <div style="float:left"><input type="text" id="customagentcpuoverloadpercent" name="customagentcpuoverloadpercent" class="form-control" style="width:27px;height:17px; padding:2px;margin-left:-1px" value="@Model.HostCustomOptions.Where(x => x.Key == "Custom_Agent_CPU_Overload_Percent").FirstOrDefault().Value" onchange="updateCustomFields(this.form);" /></div>
+                            <div style="float:left"><input type="text" id="customagentcpuoverloadpercent" name="customagentcpuoverloadpercent" class="form-control" style="width:27px;height:19px; padding:2px;margin-top:5px" value="@Model.HostCustomOptions.Where(x => x.Key == "Custom_Agent_CPU_Overload_Percent").FirstOrDefault().Value" onchange="updateCustomFields(this.form);" /></div>
                             <div> <label class="groupbox">%</label></div>
                         </li>
 
                         <li>
-                            <div style="float:left"><input type="checkbox" id="customagentnotifyiflowfreemem" name="customagentnotifyiflowfreemem" class="form-control" checked="@Model.HostCustomOptions.Where(x => x.Key == "Custom_Agent_Notify_if_LowFreeMem").FirstOrDefault().Value" onclick="updateCustomFields(this.form);" /></div>
+                            <div style="float:left"><input type="checkbox" id="customagentnotifyiflowfreemem" name="customagentnotifyiflowfreemem" class="form-check-input mt-2" checked="@Model.HostCustomOptions.Where(x => x.Key == "Custom_Agent_Notify_if_LowFreeMem").FirstOrDefault().Value" onclick="updateCustomFields(this.form);" /></div>
                             <div class="customagentnotifyiflowfreemem" style="float:left"><label class="groupbox">Notify when host Free memory is lower than</label></div>
-                            <div style="float:left"><input type="text" id="customagentlowfreememmegabytes" name="customagentlowfreememmegabytes" class="form-control" style="width:57px;height:17px; padding:2px;margin-left:-1px; text-align: right" value="@Model.HostCustomOptions.Where(x => x.Key == "Custom_Agent_LowFreeMem_Megabytes").FirstOrDefault().Value" onchange="updateCustomFields(this.form);" /></div>
+                            <div style="float:left"><input type="text" id="customagentlowfreememmegabytes" name="customagentlowfreememmegabytes" class="form-control" style="width: 57px; height: 19px; padding: 2px; margin-top: 3px; text-align: right" value="@Model.HostCustomOptions.Where(x => x.Key == "Custom_Agent_LowFreeMem_Megabytes").FirstOrDefault().Value" onchange="updateCustomFields(this.form);" /></div>
                             <div> <label class="groupbox">Mb</label></div>
                         </li>
 
                         <li>
-                            <div style="float:left"><input type="checkbox" id="customagentnotifylowdisksfreespace" name="customagentnotifylowdisksfreespace" class="form-control" checked="@Model.HostCustomOptions.Where(x => x.Key == "Custom_Agent_Notify_LowDisksFreeSpace").FirstOrDefault().Value" onclick="updateCustomFields(this.form);" /></div>
+                            <div style="float:left"><input type="checkbox" id="customagentnotifylowdisksfreespace" name="customagentnotifylowdisksfreespace" class="form-check-input mt-2" checked="@Model.HostCustomOptions.Where(x => x.Key == "Custom_Agent_Notify_LowDisksFreeSpace").FirstOrDefault().Value" onclick="updateCustomFields(this.form);" /></div>
                             <div class="customagentnotifylowdisksfreespace" style="float:left"><label class="groupbox">Notify when host Disks free space is lower than</label></div>
-                            <div style="float:left"><input type="text" id="customagentlowdisksfreespacemegabytes" name="customagentlowdisksfreespacemegabytes" class="form-control" style="width:57px;height:17px; padding:2px;margin-left:-1px; text-align: right" value="@Model.HostCustomOptions.Where(x => x.Key == "Custom_Agent_LowDisksFreeSpace_Megabytes").FirstOrDefault().Value" onchange="updateCustomFields(this.form);" /></div>
+                            <div style="float:left"><input type="text" id="customagentlowdisksfreespacemegabytes" name="customagentlowdisksfreespacemegabytes" class="form-control" style="width: 57px; height: 19px; padding: 2px; margin-top: 3px; text-align: right" value="@Model.HostCustomOptions.Where(x => x.Key == "Custom_Agent_LowDisksFreeSpace_Megabytes").FirstOrDefault().Value" onchange="updateCustomFields(this.form);" /></div>
                             <div> <label class="groupbox">Mb</label></div>
                         </li>
 
                         <li>
-                            <div style="float:left"><input type="checkbox" id="customagentnotifyifdisksoverload" name="customagentnotifyifdisksoverload" class="form-control" checked="@Model.HostCustomOptions.Where(x => x.Key == "Custom_Agent_Notify_if_Disks_Overload").FirstOrDefault().Value" onclick="updateCustomFields(this.form);" /></div>
+                            <div style="float:left"><input type="checkbox" id="customagentnotifyifdisksoverload" name="customagentnotifyifdisksoverload" class="form-check-input mt-2" checked="@Model.HostCustomOptions.Where(x => x.Key == "Custom_Agent_Notify_if_Disks_Overload").FirstOrDefault().Value" onclick="updateCustomFields(this.form);" /></div>
                             <div class="customagentnotifyifdisksoverload" style="float:left"><label class="groupbox">Notify when host Disks overloaded more than</label></div>
-                            <div style="float:left"><input type="text" id="customagentdisksoverloadpercent" name="customagentdisksoverloadpercent" class="form-control" style="width:27px;height:17px; padding:2px;margin-left:-1px" value="@Model.HostCustomOptions.Where(x => x.Key == "Custom_Agent_DisksOverload_Percent").FirstOrDefault().Value" onchange="updateCustomFields(this.form);" /></div>
+                            <div style="float:left"><input type="text" id="customagentdisksoverloadpercent" name="customagentdisksoverloadpercent" class="form-control" style="width: 27px; height: 19px; padding: 2px; margin-top: 3px" value="@Model.HostCustomOptions.Where(x => x.Key == "Custom_Agent_DisksOverload_Percent").FirstOrDefault().Value" onchange="updateCustomFields(this.form);" /></div>
                             <div> <label class="groupbox">%</label></div>
                         </li>
-
                         <li>
-                            <div style="float:left"><input type="checkbox" id="customagentnotifyifnetadaptersoverload" name="customagentnotifyifnetadaptersoverload" class="form-control" checked="@Model.HostCustomOptions.Where(x => x.Key == "Custom_Agent_Notify_if_NetAdapters_Overload").FirstOrDefault().Value" onclick="updateCustomFields(this.form);" /></div>
+                            <div style="float:left"><input type="checkbox" id="customagentnotifyifnetadaptersoverload" name="customagentnotifyifnetadaptersoverload" class="form-check-input mt-2" checked="@Model.HostCustomOptions.Where(x => x.Key == "Custom_Agent_Notify_if_NetAdapters_Overload").FirstOrDefault().Value" onclick="updateCustomFields(this.form);" /></div>
                             <div class="customagentnotifyifnetadaptersoverload" style="float:left"><label class="groupbox">Notify when host Network adapters are overloaded more than</label></div>
-                            <div style="float:left"><input type="text" id="customagentnetadaptersoverloadpercent" name="customagentnetadaptersoverloadpercent" class="form-control" style="width:27px;height:17px; padding:2px;margin-left:-1px" value="@Model.HostCustomOptions.Where(x => x.Key == "Custom_Agent_NetAdaptersOverload_Percent").FirstOrDefault().Value" onchange="updateCustomFields(this.form);" /></div>
-                            <div> <label class="groupbox">%</label></div>
+                            <div style="float:left"><input type="text" id="customagentnetadaptersoverloadpercent" name="customagentnetadaptersoverloadpercent" class="form-control" style="width: 27px; height: 19px; padding: 2px; margin-top: 3px" value="@Model.HostCustomOptions.Where(x => x.Key == "Custom_Agent_NetAdaptersOverload_Percent").FirstOrDefault().Value" onchange="updateCustomFields(this.form);" /></div>
+                            <div><label class="groupbox">%</label></div>
                         </li>
                         <li style="margin-top:7px">
-                            <div style="float:left"><input type="checkbox" id="customnotifyifagentconnectionlost" name="customnotifyifagentconnectionlost" class="form-control" checked="@Model.HostCustomOptions.Where(x => x.Key == "Custom_Notify_if_AgentConnection_Lost").FirstOrDefault().Value" onclick="updateCustomFields(this.form);" /></div>
+                            <div style="float:left"><input type="checkbox" id="customnotifyifagentconnectionlost" name="customnotifyifagentconnectionlost" class="form-check-input mt-2" checked="@Model.HostCustomOptions.Where(x => x.Key == "Custom_Notify_if_AgentConnection_Lost").FirstOrDefault().Value" onclick="updateCustomFields(this.form);" /></div>
                             <div class="customnotifyifagentconnectionlost"><label class="groupbox">Notify when Agent service have a connection error</label></div>
                         </li>
                     </ul>
@@ -193,36 +194,36 @@
             </div>
             <div style="margin-left:10px" id="otheroptionsdiv">
                 <p>
-                    <div style="float:left"><input type="checkbox" id="isenabledcustomothernotificationsettings" name="isenabledcustomothernotificationsettings" class="form-control" checked="@Model.HostCustomOptions.Where(x => x.Key == "isEnabledCustomOtherNotificationSettings").FirstOrDefault().Value" onclick="updateCustomFields(this.form);" /></div>
+                    <div style="float:left"><input type="checkbox" id="isenabledcustomothernotificationsettings" name="isenabledcustomothernotificationsettings" class="form-check-input mt-2" checked="@Model.HostCustomOptions.Where(x => x.Key == "isEnabledCustomOtherNotificationSettings").FirstOrDefault().Value" onclick="updateCustomFields(this.form);" /></div>
                     <div class="isenabledcustomothernotificationsettings"><label class="groupbox">Use custom other notification settings (instead common)</label></div>
                 </p>
                 <div id="otheritemsdiv">
 
                     <ul type="none" style="padding:0; margin-left:10px">
                         <li>
-                            <div style="float:left"><input type="checkbox" id="customnotifyifanswertimeislong" name="customnotifyifanswertimeislong" class="form-control" checked="@Model.HostCustomOptions.Where(x => x.Key == "Custom_Notify_if_AnswerTime_IsLong").FirstOrDefault().Value" onclick="updateCustomFields(this.form);" /></div>
+                            <div style="float:left"><input type="checkbox" id="customnotifyifanswertimeislong" name="customnotifyifanswertimeislong" class="form-check-input mt-2" checked="@Model.HostCustomOptions.Where(x => x.Key == "Custom_Notify_if_AnswerTime_IsLong").FirstOrDefault().Value" onclick="updateCustomFields(this.form);" /></div>
                             <div class="customnotifyifanswertimeislong" style="float:left"><label class="groupbox">Notify if host ICMP Answer Time is more than</label></div>
-                            <div style="float:left"><input type="text" id="customlonganswertimemiliseconds" name="customlonganswertimemiliseconds" class="form-control" style="width:35px;height:17px; padding:2px;margin-left:-1px" value="@Model.HostCustomOptions.Where(x => x.Key == "Custom_LongAnswerTime_miliseconds").FirstOrDefault().Value" onchange="updateCustomFields(this.form);" /></div>
+                            <div style="float:left"><input type="text" id="customlonganswertimemiliseconds" name="customlonganswertimemiliseconds" class="form-control" style="width: 35px; height: 19px; padding: 2px; margin-top: 3px" value="@Model.HostCustomOptions.Where(x => x.Key == "Custom_LongAnswerTime_miliseconds").FirstOrDefault().Value" onchange="updateCustomFields(this.form);" /></div>
                             <div> <label class="groupbox">ms</label></div>
                         </li>
                         <li style="margin-top:7px">
-                            <div style="float:left"><input type="checkbox" id="customeventlognotifyifcomputerrestarted" name="customeventlognotifyifcomputerrestarted" class="form-control" checked="@Model.HostCustomOptions.Where(x => x.Key == "Custom_EventLOG_Notify_if_ComputerRestarted").FirstOrDefault().Value" onclick="updateCustomFields(this.form);" /></div>
+                            <div style="float:left"><input type="checkbox" id="customeventlognotifyifcomputerrestarted" name="customeventlognotifyifcomputerrestarted" class="form-check-input mt-2" checked="@Model.HostCustomOptions.Where(x => x.Key == "Custom_EventLOG_Notify_if_ComputerRestarted").FirstOrDefault().Value" onclick="updateCustomFields(this.form);" /></div>
                             <div style="width:300px" class="customeventlognotifyifcomputerrestarted"><label class="groupbox">Notify if this host has been restarted</label></div>
                         </li>
                         <li>
-                            <div style="float:left"><input type="checkbox" id="customeventlognotifyifcomputergoingreboot" name="customeventlognotifyifcomputergoingreboot" class="form-control" checked="@Model.HostCustomOptions.Where(x => x.Key == "Custom_EventLOG_Notify_if_ComputerGoingReboot").FirstOrDefault().Value" onclick="updateCustomFields(this.form);" /></div>
+                            <div style="float:left"><input type="checkbox" id="customeventlognotifyifcomputergoingreboot" name="customeventlognotifyifcomputergoingreboot" class="form-check-input mt-2" checked="@Model.HostCustomOptions.Where(x => x.Key == "Custom_EventLOG_Notify_if_ComputerGoingReboot").FirstOrDefault().Value" onclick="updateCustomFields(this.form);" /></div>
                             <div class="customeventlognotifyifcomputergoingreboot"><label class="groupbox">Notify when this host is going to shutdown/reboot</label></div>
                         </li>
                         <li>
-                            <div style="float:left"><input type="checkbox" id="customeventlognotifyifcomputerrebootedbyuser" name="customeventlognotifyifcomputerrebootedbyuser" class="form-control" checked="@Model.HostCustomOptions.Where(x => x.Key == "Custom_EventLOG_Notify_if_ComputerRebootedByUser").FirstOrDefault().Value" onclick="updateCustomFields(this.form);" /></div>
+                            <div style="float:left"><input type="checkbox" id="customeventlognotifyifcomputerrebootedbyuser" name="customeventlognotifyifcomputerrebootedbyuser" class="form-check-input mt-2" checked="@Model.HostCustomOptions.Where(x => x.Key == "Custom_EventLOG_Notify_if_ComputerRebootedByUser").FirstOrDefault().Value" onclick="updateCustomFields(this.form);" /></div>
                             <div class="customeventlognotifyifcomputerrebootedbyuser"><label class="groupbox">Notify if previous shutdown/reboot has been initiated by user</label></div>
                         </li>
                         <li style="margin-top:7px">
-                            <div style="float:left"><input type="checkbox" id="customeventlogforwardcriticalevents" name="customeventlogforwardcriticalevents" class="form-control" checked="@Model.HostCustomOptions.Where(x => x.Key == "Custom_EventLOG_ForwardCriticalEvents").FirstOrDefault().Value" onclick="updateCustomFields(this.form);" /></div>
+                            <div style="float:left"><input type="checkbox" id="customeventlogforwardcriticalevents" name="customeventlogforwardcriticalevents" class="form-check-input mt-2" checked="@Model.HostCustomOptions.Where(x => x.Key == "Custom_EventLOG_ForwardCriticalEvents").FirstOrDefault().Value" onclick="updateCustomFields(this.form);" /></div>
                             <div class="customeventlogforwardcriticalevents" style="width:280px"><label class="groupbox">Forward Critical System Events</label></div>
                         </li>
                         <li>
-                            <div style="float:left"><input type="checkbox" id="customeventlogforwarderrorevents" name="customeventlogforwarderrorevents" class="form-control" checked="@Model.HostCustomOptions.Where(x => x.Key == "Custom_EventLOG_ForwardErrorEvents").FirstOrDefault().Value" onclick="updateCustomFields(this.form);" /></div>
+                            <div style="float:left"><input type="checkbox" id="customeventlogforwarderrorevents" name="customeventlogforwarderrorevents" class="form-check-input mt-2" checked="@Model.HostCustomOptions.Where(x => x.Key == "Custom_EventLOG_ForwardErrorEvents").FirstOrDefault().Value" onclick="updateCustomFields(this.form);" /></div>
                             <div class="customeventlogforwarderrorevents" style="width:280px"><label class="groupbox">Forward Error System Events</label></div>
                         </li>
 
@@ -231,7 +232,7 @@
             </div>
             <div style="margin-left:10px" id="customemaildiv">
                 <p>
-                    <div style="float:left"><input type="checkbox" id="isenabledcustomemail" name="isenabledcustomemail" class="form-control" checked="@Model.HostCustomOptions.Where(x => x.Key == "isEnabledCustomEmail").FirstOrDefault().Value" onclick="updateCustomFields(this.form);" /></div>
+                    <div style="float:left"><input type="checkbox" id="isenabledcustomemail" name="isenabledcustomemail" class="form-check-input mt-2" checked="@Model.HostCustomOptions.Where(x => x.Key == "isEnabledCustomEmail").FirstOrDefault().Value" onclick="updateCustomFields(this.form);" /></div>
                     <div class="isenabledcustomemail"><label class="groupbox">Use custom notification e-mail (instead common)</label></div>
                 </p>
 
@@ -239,22 +240,22 @@
                     <ul type="none" style="padding:0; margin-left:10px">
                         <li>
                             <div style="float:left"><label class="groupbox">E-mail:</label></div>
-                            <div class="customemail"><input type="text" id="customemail" name="customemail" class="form-control" style="width:250px;height:17px; padding:2px;margin-left:-1px" value="@Model.HostCustomOptions.Where(x => x.Key == "Custom_Email").FirstOrDefault().Value" onchange="updateCustomFields(this.form);" /></div>
+                            <div class="customemail"><input type="text" id="customemail" name="customemail" class="form-control" style="width:250px;height:21px; padding:2px;margin-left:-1px" value="@Model.HostCustomOptions.Where(x => x.Key == "Custom_Email").FirstOrDefault().Value" onchange="updateCustomFields(this.form);" /></div>
                         </li>
                     </ul>
                 </div>
             </div>
             <div style="margin-left:10px" id="hostdependingldiv">
                 <p>
-                    <div style="float:left"><input type="checkbox" id="isenabledhostdepending" name="isenabledhostdepending" class="form-control" checked="@(Model.HostCustomOptions.Where(x => x.Key == "HostDependentOn").FirstOrDefault().Value != "" ? true : false)" onclick="updateCustomFields(this.form);" /></div>
+                    <div style="float:left"><input type="checkbox" id="isenabledhostdepending" name="isenabledhostdepending" class="form-check-input mt-2" checked="@(Model.HostCustomOptions.Where(x => x.Key == "HostDependentOn").FirstOrDefault().Value != "" ? true : false)" onclick="updateCustomFields(this.form);" /></div>
                     <div style="float:left" class="isenabledhostdepending"><label class="groupbox">This host depends on</label></div>
-                    <div class="hostdepending"><input type="text" id="hostdepending" name="hostdepending" class="form-control" style="width:200px;height:17px; padding:2px;margin-left:-1px" value="@Model.HostCustomOptions.Where(x => x.Key == "HostDependentOn").FirstOrDefault().Value" onchange="updateCustomFields(this.form);" /></div>
+                    <div class="hostdepending"><input type="text" id="hostdepending" name="hostdepending" class="form-control" style="width:200px;height:21px; padding:2px;margin-left:-1px" value="@Model.HostCustomOptions.Where(x => x.Key == "HostDependentOn").FirstOrDefault().Value" onchange="updateCustomFields(this.form);" /></div>
                </p>
             </div>
             
             <div style="margin-left:10px" id="isenabledsnmpdiv">
                 <p>
-                    <div style="float:left"><input type="checkbox" id="isenabledsnmp" name="isenabledsnmp" class="form-control" checked="@Model.HostCustomOptions.Where(x => x.Key == "Custom_UseSNMP").FirstOrDefault().Value" onclick="updateCustomFields(this.form);" /></div>
+                    <div style="float:left"><input type="checkbox" id="isenabledsnmp" name="isenabledsnmp" class="form-check-input mt-2" checked="@Model.HostCustomOptions.Where(x => x.Key == "Custom_UseSNMP").FirstOrDefault().Value" onclick="updateCustomFields(this.form);" /></div>
                     <div style="width:300px" class="isenabledsnmp"><label class="groupbox">Use SNMP Notifications</label></div>
                 </p>
             </div>

@@ -7,9 +7,8 @@
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
 }
 
-body {
-    padding-top: 50px;
-    padding-bottom: 20px;    
+body {        
+    background-color: #29292d;
 }
 
 /* Set padding to keep content from hitting the edges */
@@ -211,7 +210,7 @@ a.refreshlink {
 
 .hostslist_div {
     float: left;
-    margin-left: 200px;
+    margin-left: 205px; /* overrided in JS ShowHideControls() func*/
     padding-right: 80px;
 }
 
@@ -226,7 +225,7 @@ a.refreshlink {
     height: 158px;
     z-index: 1;
     font-family: Tahoma;
-    font-size: 13.2px;
+    font-size: 12.7px;
     padding-left: 3px;
 }
 
@@ -244,8 +243,8 @@ a.refreshlink {
 .monitoring_host_notify_checkbox {
     position: relative;
     z-index: 2;
-    left: 233px;
-    top: 90px;
+    left: 225px;
+    top: 105px;
     width: 65px;
 }
 
@@ -253,8 +252,8 @@ a.refreshlink {
 .monitoring_host_isenabled_checkbox {
     position: relative;
     z-index: 2;
-    left: 218px;
-    top: 102px;
+    left: 212px;
+    top: 119px;
     width: 80px;
 }
 
@@ -263,16 +262,15 @@ a.refreshlink {
     border-style: solid;
     border-width: 1px;
     float: left;
-    margin-top: 180px;
+    margin-top: 193px;
     margin-left: 5px;
     margin-bottom: 5px;
-    width: 190px;
-    color: #a1a1a3;
+    width: 190px;    
    text-align:center;
 }
 
 .monitoring_host_selectpic {
-    margin-top: 160px;
+    margin-top: 170px;
     width: 103px;
     height: 24px;
     float: left;
@@ -312,8 +310,8 @@ a.refreshlink {
 a.monitoring_host_details {
     position: relative;
     z-index: 2;
-    left: 46.5px;
-    top: -20px;    
+    left: 47px;
+    top: -38px;    
     font-size: 12px;
 }
 
@@ -321,7 +319,7 @@ a.monitoring_host_log {
     position: relative;
     z-index: 2;
     left: 15px;
-    top: 5px;
+    top: -10px;
     font-size: 12px;
 }
 
@@ -401,7 +399,8 @@ a.monitoring_host_log {
 
 .textboxstyle {
     background: #29292d;
-    border: hidden;            
+    color: #a1a1a3;
+    border: hidden;
 }
 
 #groups_fixed {
@@ -565,7 +564,7 @@ a.monitoring_host_log_stringview {
     position: relative;
     z-index: 2;
     left: 119px;
-    top: 25px;
+    top: 50px;
     width: 28px;
 }
 
@@ -574,23 +573,23 @@ a.monitoring_host_log_stringview {
     position: relative;
     z-index: 2;
     left: 120px;
-    top: 23px;
+    top: 51px;
     width: 27px;
 }
 
 a.monitoring_host_details_smallview {
     position: relative;
     z-index: 2;
-    left: 111px;
-    top: -31px;    
+    left: 110px;
+    top: -21px;    
     font-size: 8px;
 }
 
 a.monitoring_host_log_smallview {
     position: relative;
     z-index: 2;
-    left: -26.5px;
-    top: 7.5px;    
+    left: 86px;
+    top: -5px;    
     font-size: 8px;
 }
 
@@ -599,7 +598,7 @@ a.monitoring_host_log_smallview {
     border-style: solid;
     border-width: 1px;
     float: left;
-    margin-top: 55px;
+    margin-top: 75px;
     margin-left: 0px;
     margin-bottom: 5px;
     width: 133px;
@@ -616,9 +615,10 @@ a.monitoring_host_log_smallview {
 .monitoring_host_combobox_smallview {
     border-width: 1px;
     width: 17px;
-    height: 17.5px;
+    height: 19px;
     color: #a1a1a3;
     background: #29292d;
+    margin-top:20px;
 }
 
 .monitoring_host_description_smallview {
@@ -655,6 +655,7 @@ div.bigblock{
 }
 
 fieldset.groupbox {
+    font-size: 1.0em !important;
     border: 1px groove #ddd !important;
     color: #a1a1a3;
     padding: 10px;
@@ -667,7 +668,7 @@ legend.groupbox {
     font-size: 1.1em !important;
     font-weight: normal !important;
     text-align: left !important;
-    width: auto;
+    width: 100%;
     padding: 0px 10px 0px 10px;
     border-bottom: none;
     color: #a1a1a3;
@@ -675,7 +676,7 @@ legend.groupbox {
 }
 
 legend.included_groupbox {
-    font-size: 0.9em !important;
+    font-size: 1em !important;
     font-weight: normal !important;
     text-align: left !important;
     width: auto;

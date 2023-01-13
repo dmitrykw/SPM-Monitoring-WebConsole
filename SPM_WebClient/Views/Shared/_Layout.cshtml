@@ -17,30 +17,27 @@
     <meta name="msapplication-TileColor" content="#da532c">
     <meta name="theme-color" content="#ffffff">
 </head>
-<body style="background-color:#29292d" onload="setTimeout('document.location.reload();', 120000);">
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div style="position:absolute; margin:3px">
+<body onload="setTimeout('document.location.reload();', 120000);">
+    <nav class="navbar navbar-expand-lg navbar-dark controls" style="background-color: transparent; height: 65px;">
+
+        <div style="float:left;margin-top:15px; margin-left:5px">
             @Html.ActionLink("Logo", "Index", "Monitoring", null, new { @class = "mylogo" })
         </div>
-        <div style="margin-left:80px" class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("Monitoring", "Index", "Monitoring", new { area = "" }, new { @class = "navbar-brand" })
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <!--<li>@Html.ActionLink("Home", "Index", "Home")</li> -->
-                    <li>@Html.ActionLink("Options", "Index", "Options")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <!--<li>@Html.ActionLink("Contact", "Contact", "Home")</li> -->
+        @Html.ActionLink("SPM Web Console", "Index", "Monitoring", new { area = "" }, new { @class = "navbar-brand", @style = "color:#a1a1a3;" })
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">@Html.ActionLink("Monitoring", "Index", "Monitoring", null, new { @class = "nav-link", @id = "monitoring-navlink" })</li>
+                    <li class="nav-item">@Html.ActionLink("Options", "Index", "Options", null, new { @class = "nav-link", @id = "options-navlink" })</li>
+                    <li class="nav-item">@Html.ActionLink("About", "About", "Home", null, new { @class = "nav-link", @id = "about-navlink" })</li>
                 </ul>
             </div>
         </div>
-    </div>
+    </nav>
+
     <div class="body-content">
 
         @RenderBody()
@@ -57,36 +54,52 @@
 
     <script type="text/javascript">
 
-    $(function () {
-        $.ajaxSetup({ cache: false });
+        $(function () {
+            $.ajaxSetup({ cache: false });
 
-        $(".details_btn").click(function (e) {
 
-            e.preventDefault();
-            $.get(this.href, function (data) {
-                $('#dialogContent').html(data);
-                $('#modDialog').modal('show');
+            //Navigation links highliths activate            
+            var currentURL = window.location.href;
+            if (currentURL.toLocaleLowerCase().includes("options")) {
+                $('#options-navlink').addClass("active");
+            }
+            else if (currentURL.toLocaleLowerCase().includes("about")) {
+                $('#about-navlink').addClass("active");
+            }
+            else {
+                $('#monitoring-navlink').addClass("active");
+            }
+            
+
+            $(".details_btn").click(function (e) {
+
+                e.preventDefault();
+                $.get(this.href, function (data) {
+                    $('#dialogContent').html(data);
+                    $('#modDialog').modal('show');
+                });
             });
-        });
 
-        $(".sortable").sortable(
-            {
-                update: function (event, ui) {
+            $(".sortable").sortable(
+                {
+                    update: function (event, ui) {
 
-                    var IDs_string = "";
+                        var IDs_string = "";
 
-                    $('.hostslist_div').children('div').each(function () {
-                        IDs_string += ($(this).attr("id")) + ","
-                    });
+                        $('.hostslist_div').children('div').each(function () {
+                            IDs_string += ($(this).attr("id")) + ","
+                        });
 
-                    IDs_string = IDs_string.substring(0, IDs_string.length - 1);
+                        IDs_string = IDs_string.substring(0, IDs_string.length - 1);
 
-                    updateSortedHosts(IDs_string)
+                        updateSortedHosts(IDs_string)
 
-                }
-            });
-        $(".sortable").disableSelection();
-    })
+                    }
+                });
+            $(".sortable").disableSelection();
+
+            ShowHideControls(); //Show or Hide Controls on page depends on Cookie
+        })
 
 
 
@@ -145,6 +158,59 @@
             });
         }
 
+
+
+
+        //Cookies for JS
+        function setCookie(cname, cvalue, exdays) {
+            const d = new Date();
+            d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+            let expires = "expires=" + d.toUTCString();
+            document.cookie = cname + "=" + cvalue + ";" + expires + ";SameSite=Lax;Secure;path=/";
+        }
+
+        function getCookie(cname) {
+            let name = cname + "=";
+            let ca = document.cookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return "";
+        }
+        //End Cookies for JS
+
+
+        // Show Hide Controls
+        function ShowHideControls() {
+
+            if (getCookie('ShowHideControls') === "Show") {
+                $(".controls").show();
+                $(".hostslist_div").css("margin-left", "200px");
+                $("#ShowHideLabelText").text("Swith to Less Controls");
+            }
+            else if (getCookie('ShowHideControls') === "Hide") {
+                $(".controls").hide();
+                $(".hostslist_div").css("margin-left", "0px");
+                $("#ShowHideLabelText").text("Swith to All Controls");
+            }            
+        }
+
+        function SwitchShowHideControls() {
+            if (getCookie('ShowHideControls') === "Hide") {
+                setCookie('ShowHideControls', 'Show', 7);
+            }
+            else {
+                setCookie('ShowHideControls', 'Hide', 7);
+            }
+            ShowHideControls();
+        }
+        // End Show Hide Controls
     </script>
 
     @RenderSection("scripts", required: false)

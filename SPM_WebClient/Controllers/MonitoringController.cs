@@ -17,8 +17,28 @@ namespace SPM_WebClient.Controllers
 
         // GET: Monitoring
         
-        public ActionResult Index(string group_filter = "All Hosts")
+        public ActionResult Index(string group_filter = "All Hosts", string show_filter = null)
         {
+            #region Custom for one client, who wants to set Showing Level by URL
+            //If show_filter is set - we call SetCookie() method,
+            //who Set the cookie and call again Index() method without show_filter argument.
+            if (show_filter != null)
+            {
+                switch (show_filter.ToLower())
+                {
+                    case "set_show_all":
+                        return SetCookie(group_filter, "ShowHostsFilterLevel", "0");
+
+                    case "set_show_failedandwarning":
+                        return SetCookie(group_filter, "ShowHostsFilterLevel", "1");
+
+                    case "set_show_failedonly":
+                        return SetCookie(group_filter, "ShowHostsFilterLevel", "2");
+                }
+
+            }
+            #endregion
+
             HttpCookie cookieReq = Request.Cookies["ShowHostsFilterLevel"];
             int show_hosts_filter_level = 0;
             if (cookieReq != null)
@@ -105,10 +125,11 @@ namespace SPM_WebClient.Controllers
         [HttpPost]
         public ActionResult SetCookie(string selectedgroupname, string cookie_name, string cookie_value)
         {
-            HttpCookie StudentCookie = new HttpCookie(cookie_name);
-            StudentCookie.Value = cookie_value;
-            StudentCookie.Expires = DateTime.Now.AddHours(12);
-            Response.Cookies.Add(StudentCookie);
+            HttpCookie cookie = new HttpCookie(cookie_name);
+            cookie.Value = cookie_value;
+            cookie.Expires = DateTime.Now.AddDays(7);
+
+            Response.Cookies.Add(cookie);
 
             return RedirectToAction("Index", new { group_filter = selectedgroupname});
         }
