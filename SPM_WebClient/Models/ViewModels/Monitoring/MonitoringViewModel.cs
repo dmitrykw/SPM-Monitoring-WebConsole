@@ -15,13 +15,10 @@ namespace SPM_WebClient.Models
         public List<Host> Hosts = new List<Host>();
         public List<Group> Groups = new List<Group>();
         public int ShowHostsFilterLevel {get; private set;}
-        string cfgpath;
-        string url;
-        string apikey;
-        bool isreadonly;
+
         
 
-        public bool IsReadOnly { get { return isreadonly; } }
+        public bool IsReadOnly { get { return App_Globals.IsReadOnly; } }
 
         public string GroupsHeader = "Groups:";
 
@@ -34,8 +31,7 @@ namespace SPM_WebClient.Models
         public MonitoringViewModel(string group_filter = "All Hosts", int hosts_status_filter_level = 0)
         {
             this.ShowHostsFilterLevel = hosts_status_filter_level;
-            GetConfig();
-
+     
             if (group_filter == null || group_filter == "") { FillGroups(); return; }
             
 
@@ -47,8 +43,7 @@ namespace SPM_WebClient.Models
            
         }
         public MonitoringViewModel(string search_filter, bool is_search)
-        {
-            GetConfig();
+        {           
 
             if (search_filter == null || search_filter == "") { FillGroups(); return; }
 
@@ -63,8 +58,7 @@ namespace SPM_WebClient.Models
 
         public MonitoringViewModel(int host_id)
         {
-            GetConfig();            
-
+           
             FillHosts(host_id);
             FillGroups();
            
@@ -73,9 +67,9 @@ namespace SPM_WebClient.Models
 
         public void SendHostUpdateAPI(UpdateHostObj model)
         {
-            if (isreadonly) { return; }
+            if (IsReadOnly) { return; }
 
-            Spm_Api_Processor spm_api_processor = new Spm_Api_Processor(url, apikey);
+            Spm_Api_Processor spm_api_processor = new Spm_Api_Processor(App_Globals.Url, App_Globals.ApiKey);
             try
             { spm_api_processor.SendHostUpdate(model); }
             catch (Exception ex) { throw ex; }
@@ -84,9 +78,9 @@ namespace SPM_WebClient.Models
 
         public void RemoveHostAPI(int hostid_int)
         {
-            if (isreadonly) { return; }
+            if (IsReadOnly) { return; }
 
-            Spm_Api_Processor spm_api_processor = new Spm_Api_Processor(url, apikey);
+            Spm_Api_Processor spm_api_processor = new Spm_Api_Processor(App_Globals.Url, App_Globals.ApiKey);
             try
             { spm_api_processor.RemoveHost(hostid_int); }
             catch (Exception ex) { throw ex; }
@@ -95,9 +89,9 @@ namespace SPM_WebClient.Models
 
         public void AddHostAPI(string hostname, string description, string groupname, string hosttype)
         {
-            if (isreadonly) { return; }
+            if (IsReadOnly) { return; }
 
-            Spm_Api_Processor spm_api_processor = new Spm_Api_Processor(url, apikey);
+            Spm_Api_Processor spm_api_processor = new Spm_Api_Processor(App_Globals.Url, App_Globals.ApiKey);
             try
             { spm_api_processor.AddNewHost(hostname, description, groupname, hosttype); }
             catch (Exception ex) { throw ex; }
@@ -105,9 +99,9 @@ namespace SPM_WebClient.Models
 
         public void SendHostSortingUpdateAPI(UpdateHostSortingObj model)
         {
-            if (isreadonly) { return; }
+            if (IsReadOnly) { return; }
 
-            Spm_Api_Processor spm_api_processor = new Spm_Api_Processor(url, apikey);
+            Spm_Api_Processor spm_api_processor = new Spm_Api_Processor(App_Globals.Url, App_Globals.ApiKey);
             try
             { spm_api_processor.SendHostSortingUpdate(model); }
             catch (Exception ex) { throw ex; }
@@ -125,20 +119,11 @@ namespace SPM_WebClient.Models
             }
         }
 
-        private void GetConfig()
-        {
-            cfgpath = System.Web.Hosting.HostingEnvironment.MapPath(@"~/Config/config.cfg");
-            INIManager manager = new INIManager(cfgpath);
-            //Получить значение по ключу name из секции APICONFIG
-            url = manager.GetPrivateString("APICONFIG", "api_hostname");
-            apikey = manager.GetPrivateString("APICONFIG", "api_key");
-            isreadonly = (manager.GetPrivateString("APICONFIG", "readonly").ToLower() == "true") ? true : false;
-        }
-
+      
 
         private void FillHosts(string group_filter, int show_hosts_filter_level = 0)
         {
-            Spm_Api_Processor spm_api_processor = new Spm_Api_Processor(url, apikey);
+            Spm_Api_Processor spm_api_processor = new Spm_Api_Processor(App_Globals.Url, App_Globals.ApiKey);
 
             try
             {
@@ -171,7 +156,7 @@ namespace SPM_WebClient.Models
 
         private void FillHosts(string search_filter, bool is_search)
         {
-            Spm_Api_Processor spm_api_processor = new Spm_Api_Processor(url, apikey);                
+            Spm_Api_Processor spm_api_processor = new Spm_Api_Processor(App_Globals.Url, App_Globals.ApiKey);                
                     try
                     {
                         Hosts = spm_api_processor.GetHosts(search_filter, is_search);
@@ -186,7 +171,7 @@ namespace SPM_WebClient.Models
 
         private void FillHosts(int id)
         {
-            Spm_Api_Processor spm_api_processor = new Spm_Api_Processor(url, apikey);                     
+            Spm_Api_Processor spm_api_processor = new Spm_Api_Processor(App_Globals.Url, App_Globals.ApiKey);                     
                 try
                 {
                     Hosts = spm_api_processor.GetHosts(id);
@@ -201,7 +186,7 @@ namespace SPM_WebClient.Models
 
         private void FillGroups()
         {
-            Spm_Api_Processor spm_api_processor = new Spm_Api_Processor(url, apikey);                        
+            Spm_Api_Processor spm_api_processor = new Spm_Api_Processor(App_Globals.Url, App_Globals.ApiKey);                        
                 try
                 {                
                     Groups = spm_api_processor.GetGroups();
@@ -218,95 +203,8 @@ namespace SPM_WebClient.Models
 
 
 
-    public class MonitoringDetailsViewModel
-    {
-
-        public List<Host> Hosts = new List<Host>();        
-        string cfgpath;
-        string url;
-        string apikey;
-
-        public MonitoringDetailsViewModel(int id)
-        {
-            GetConfig();
-
-            FillHosts(id);
-                 
-        }
+    
 
 
-
-
-        private void GetConfig()
-        {
-            cfgpath = System.Web.Hosting.HostingEnvironment.MapPath(@"~/Config/config.cfg");
-            INIManager manager = new INIManager(cfgpath);
-            //Получить значение по ключу name из секции APICONFIG
-            url = manager.GetPrivateString("APICONFIG", "api_hostname");
-            apikey = manager.GetPrivateString("APICONFIG", "api_key");
-        }
-
-        private void FillHosts(int id)
-        {
-            Spm_Api_Processor spm_api_processor = new Spm_Api_Processor(url, apikey);
-            try
-            {
-                Hosts = spm_api_processor.GetHosts(id);             
-            }
-            catch
-            {}
-
-        }
-
-    }
-
-
-    public class MonitoringHostLogViewModel
-    {
-
-        public List<KeyValuePair<int, string>> HostsLogs = new List<KeyValuePair<int, string>>();
-        string cfgpath;
-        string url;
-        string apikey;
-
-        public MonitoringHostLogViewModel(int id)
-        {
-            GetConfig();
-
-            FillHostLog(id);            
-                 
-        }
-
-
-
-
-        private void GetConfig()
-        {
-            cfgpath = System.Web.Hosting.HostingEnvironment.MapPath(@"~/Config/config.cfg");
-            INIManager manager = new INIManager(cfgpath);
-            //Получить значение по ключу name из секции APICONFIG
-            url = manager.GetPrivateString("APICONFIG", "api_hostname");
-            apikey = manager.GetPrivateString("APICONFIG", "api_key");
-        }
-
-        private void FillHostLog(int id)
-        {
-            Spm_Api_Processor spm_api_processor = new Spm_Api_Processor(url, apikey);
-            try
-            {
-                KeyValuePair<int?, string> hostlog = spm_api_processor.GetHostLog(id);
-                if (hostlog.Key.HasValue && hostlog.Value != null)
-                {
-
-                   // string loghtmlstring = hostlog.Value.Replace("\r\n", @"<br />");
-
-                    HostsLogs.Add(new KeyValuePair<int, string>(hostlog.Key.Value, hostlog.Value)); 
-                }
-            }
-            catch
-            {}
-            //http://localhost:51634/Monitoring/HostLog?id=211656325
-        }
-
-    }
+    
 }

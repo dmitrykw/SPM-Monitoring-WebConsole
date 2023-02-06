@@ -116,15 +116,18 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\App_Globals.cs" />
     <Compile Include="Models\Extentions.cs" />
     <Compile Include="Models\Group.cs" />
     <Compile Include="Models\Host.cs" />
     <Compile Include="Models\INIManager.cs" />
     <Compile Include="Models\LogicalDisc.cs" />
-    <Compile Include="Models\MonitoringViewModels.cs" />
+    <Compile Include="Models\ViewModels\Monitoring\MonitoringDetailsViewModel.cs" />
+    <Compile Include="Models\ViewModels\Monitoring\MonitoringHostLogViewModel.cs" />
+    <Compile Include="Models\ViewModels\Monitoring\MonitoringViewModel.cs" />
     <Compile Include="Models\NetworkAdapter.cs" />
     <Compile Include="Models\Settings.cs" />
-    <Compile Include="Models\OptionsViewModels.cs" />
+    <Compile Include="Models\ViewModels\Options\OptionsViewModel.cs" />
     <Compile Include="Models\Spm_Api_Processor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

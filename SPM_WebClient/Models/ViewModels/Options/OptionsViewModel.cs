@@ -12,14 +12,9 @@ namespace SPM_WebClient.Models
     public class OptionsViewModel
     {        
         public Settings Settings = new Settings();
-
-        string cfgpath;
-        string url;
-        string apikey;
-        bool isreadonly;
         
 
-        public bool IsReadOnly { get { return isreadonly; } }
+        public bool IsReadOnly { get { return App_Globals.IsReadOnly; } }
         
 
         public bool ApiIsAvailable { get; set; }
@@ -27,27 +22,14 @@ namespace SPM_WebClient.Models
 
 
         public OptionsViewModel()
-        {
-            GetConfig();
-
-            FillSettings();            
-            
+        {          
+            FillSettings();                        
         }
-
-
-        private void GetConfig()
-        {
-            cfgpath = System.Web.Hosting.HostingEnvironment.MapPath(@"~/Config/config.cfg");
-            INIManager manager = new INIManager(cfgpath);
-            //Получить значение по ключу name из секции APICONFIG
-            url = manager.GetPrivateString("APICONFIG", "api_hostname");
-            apikey = manager.GetPrivateString("APICONFIG", "api_key");
-            isreadonly = (manager.GetPrivateString("APICONFIG", "readonly").ToLower() == "true") ? true : false;
-        }
+        
 
         private void FillSettings()
         {
-            Spm_Api_Processor spm_api_processor = new Spm_Api_Processor(url, apikey);
+            Spm_Api_Processor spm_api_processor = new Spm_Api_Processor(App_Globals.Url, App_Globals.ApiKey);
                            
                 try
                 {                  
@@ -66,9 +48,9 @@ namespace SPM_WebClient.Models
         
         public void SendOptionsUpdateAPI(UpdateSettingsObj input_data)
         {
-            if (isreadonly) { return; }
+            if (IsReadOnly) { return; }
 
-            Spm_Api_Processor spm_api_processor = new Spm_Api_Processor(url, apikey);                     
+            Spm_Api_Processor spm_api_processor = new Spm_Api_Processor(App_Globals.Url, App_Globals.ApiKey);                     
                 try
                 {spm_api_processor.SendSettingsUpdate(input_data);}
                 catch(Exception ex) { throw ex;  }            
