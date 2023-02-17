@@ -12,7 +12,7 @@ namespace SPM_WebClient
                         "~/Scripts/jquery-{version}.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryUI").Include(
-                        "~/Scripts/jquery-ui.js"));
+                        "~/Scripts/jquery-ui.js", "~/Scripts/jquery-ui-timepicker-addon.js"));
           
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
@@ -29,7 +29,9 @@ namespace SPM_WebClient
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
-                      "~/Content/site.css"));
-        }
+                      "~/Content/Site.css",
+                      "~/Content/jquery-ui.css",
+                      "~/Content/jquery-ui-timepicker-addon.css"));
+        }       
     }
 }

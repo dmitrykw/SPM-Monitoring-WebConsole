@@ -5,10 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!--<meta http-equiv="refresh" content="60">-->
     <title>@ViewBag.Title - SPM Web Console</title>
-    @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")
-    <link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
-
+    @Styles.Render("~/Content/css")     
     <link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -32,6 +29,7 @@
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">@Html.ActionLink("Monitoring", "Index", "Monitoring", null, new { @class = "nav-link", @id = "monitoring-navlink" })</li>
                     <li class="nav-item">@Html.ActionLink("Options", "Index", "Options", null, new { @class = "nav-link", @id = "options-navlink" })</li>
+                    <li class="nav-item">@Html.ActionLink("Reports", "Index", "Reports", null, new { @class = "nav-link", @id = "reports-navlink" })</li>
                     <li class="nav-item">@Html.ActionLink("About", "About", "Home", null, new { @class = "nav-link", @id = "about-navlink" })</li>
                 </ul>
             </div>
@@ -46,7 +44,7 @@
         </footer>
     </div>
 
-
+    @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/jqueryUI")
     @Scripts.Render("~/bundles/bootstrap")
@@ -58,10 +56,13 @@
             $.ajaxSetup({ cache: false });
 
 
-            //Navigation links highliths activate            
+            //Navigation links highliths activate
             var currentURL = window.location.href;
             if (currentURL.toLocaleLowerCase().includes("options")) {
                 $('#options-navlink').addClass("active");
+            }
+            else if (currentURL.toLocaleLowerCase().includes("reports")) {
+                $('#reports-navlink').addClass("active");
             }
             else if (currentURL.toLocaleLowerCase().includes("about")) {
                 $('#about-navlink').addClass("active");
@@ -69,7 +70,7 @@
             else {
                 $('#monitoring-navlink').addClass("active");
             }
-            
+
 
             $(".details_btn").click(function (e) {
 
@@ -198,7 +199,7 @@
                 $(".controls").hide();
                 $(".hostslist_div").css("margin-left", "0px");
                 $("#ShowHideLabelText").text("Swith to All Controls");
-            }            
+            }
         }
 
         function SwitchShowHideControls() {

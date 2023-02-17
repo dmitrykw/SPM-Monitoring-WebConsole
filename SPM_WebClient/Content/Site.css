@@ -34,14 +34,16 @@ input[type=checkbox] {
     height: 12px;
 }
 
-
+input[type=text]:disabled {
+    background-color: #444444;
+    border-width: 0px;
+}
 
 
 
 .tooltip-wide, .tooltip.bottom, .tooltip-inner {
     width: auto; /* ширина подсказки */
-    max-width: none; /* максимальная ширина подсказки (по умолчанию 200px) */
-    text-wrap: none;
+    max-width: none; /* максимальная ширина подсказки (по умолчанию 200px) */    
     white-space: nowrap;
     z-index:999;
 }
@@ -149,6 +151,15 @@ textarea {
             -moz-box-shadow: 0 0 10px 5px #8a0a0a inset;
         }
 
+    .reportsbtn {
+        height: 25px;
+        font-size: 15px;
+        color: #a1a1a3;
+        padding: 5px;
+        padding-top: 1px;
+        margin: 5px;
+        margin-top: 2px;
+    }
 
 
     a.regularbtn {
@@ -697,4 +708,40 @@ select.groupbox {
     color: black;
     font-size: 0.9em !important;
     font-weight: normal !important;
+}
+
+h6.reporthostheader {
+    color: #a1a1a3;
+    text-align:center;
+}
+
+.form-select {
+    color: #a1a1a3;
+    background-color: #222224;
+    font-size: 15px;
+    font-family: Calibri;
+    overflow-y: auto;
+}
+
+    .form-select.inlineselect {
+        background: transparent;        
+        background-color: white;
+        color: #3a3a48;
+        width: 40px;
+        height: 23px;
+        padding: 0px;
+        padding-left: 10px;
+    }
+
+        .form-select.inlineselect:disabled {
+            background-color: #444444;
+            border-width: 0px;
+        }
+
+
+.form-control.datetimepicker {
+    height: 19px;
+    padding: 2px;
+    padding-left: 10px;
+    padding-right: 10px;
 }

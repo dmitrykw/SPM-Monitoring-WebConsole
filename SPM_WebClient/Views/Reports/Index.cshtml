@@ -1,0 +1,323 @@
+﻿@using SPM_WebClient.Models
+
+@{
+    ViewBag.Title = "Reports";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div style="color:lightgray;margin-left:150px">@Model.ConnectionErrorHeader</div>
+<div id="readonly_mode_word"><h3>@((Model.IsReadOnly == true) ? "ReadOnly Mode" : "")</h3></div>
+
+<div id="chartContainer" style="height: 370px; width: 97%;"></div>
+
+<div style="float: right; margin: 30px; margin-right:40px">
+        <input type="checkbox" name="show_chart" id="show_chart" class="form-check-input" style="margin-top:7px" onchange="ShowHideChartContainer()"/>
+        <label class="form-check-label groupbox" for="show_chart">Show Chart</label>
+</div>
+
+<div style="margin-top:50px">
+
+    <form onsubmit="return false">
+        <div>
+            <div style="float:left"><label class="groupbox">Hostname/IP:</label></div>
+            <div style="margin-left:10px;float:left; margin-top:5px"><input type="text" id="hostname" name="hostname" class="form-control" style="width:150px;height:19px; padding:2px;" /></div>
+            <button class="btn btn-dark reportsbtn" onclick="AddHostsToSelectForm(this.form)">Add to list</button>
+        </div>
+        <div style="float:left;margin:10px;">
+            <h6 class="reporthostheader">Hosts:</h6>
+            <select id="hosts_select_list" class="form-select" size="5" style="min-width:200px; max-width:300px">
+                @foreach (ReportHost host in Model.ReportHosts)
+                {
+                    <option value="@host.Hostname">@host.Hostname</option>
+                }
+            </select>
+        </div>
+    </form>
+
+
+    <div style="margin:45px">
+        <div>
+            @using (Html.BeginForm("Index", "Reports", FormMethod.Get, new { enctype = "multipart/form-data", id = "load_icmp_form" }))
+            {
+                <div style="float:left">
+                    <input type="hidden" id="hostnames" name="hostnames" />
+                    <input id="load_all_btn" type="submit" class="btn btn-dark reportsbtn" value="Load ICMP Data for All" onclick="SaveFilterStates();"/>
+                </div>
+                <div>
+                    <table>
+                        <tr>
+                            <td>
+                                <div style="float:left"><label class="groupbox">Date From:</label></div>
+                                <div style="margin-left:10px;float:left; margin-top:5px"><input type="text" readonly="readonly" id="date_from" name="date_from" class="form-control datetimepicker" /></div>
+
+                            </td>
+                            <td>
+                                <div style="float:left"><label class="groupbox">Date To:</label></div>
+                                <div style="margin-left:10px;float:left; margin-top:5px"><input type="text" readonly="readonly" id="date_to" name="date_to" class="form-control datetimepicker" /></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div style="float:left"><label class="groupbox">Answer Time(ms):</label></div>
+                                <select style="float: left; " class="form-select form-select-sm inlineselect" id="answer_time_sign" name="answer_time_sign">
+                                    <option value=">">></option>
+                                    <option selected value=">=">>=</option>
+                                    <option value="<"><</option>
+                                    <option value="<="><=</option>
+                                    <option value="=">=</option>
+                                    <option value="<>"><></option>
+                                </select>
+                                <div style="margin-left:10px;float:left;"><input type="text" id="answer_time" name="answer_time" class="form-control" style="width:40px;height:23px; " /></div>
+
+                            </td>
+                            <td>
+                                <input type="checkbox" name="failed_only" id="failed_only" class="form-check-input" style="margin-top:7px" onchange="AutoDisableFields()"/>
+                                <label style="margin-top:3px" class="form-check-label groupbox" for="failed_only">Show FAILED points only</label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div style="float:left">
+                                    <input type="checkbox" name="auto_scaling" id="auto_scaling" class="form-check-input" style="margin-top:7px" onchange="AutoDisableFields()"/>
+                                    <label style="margin-top:3px" class="form-check-label groupbox" for="auto_scaling">Auto Scaling</label>
+                                </div>
+                                <div style="float:left"><label class="groupbox">Manual scaling: Add only each</label></div>
+                            </td>
+                            <td>
+                                <select style="float: left; " class="form-select form-select-sm inlineselect" id="scaling_index" name="scaling_index">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                </select>
+                                <div style="float:left"><label class="groupbox">point (and remove intermediate)</label></div>
+
+                            </td>
+                        </tr>
+                    </table>
+                </div>                                
+            }
+        </div>
+        <div style="margin-top:-40px">
+            <input type="submit" class="btn btn-dark reportsbtn" value="Remove Selected" onclick="RemoveSelectedHost()" />
+        </div>
+        <div style="margin-top:5px">
+            @using (Html.BeginForm("Index", "Reports", FormMethod.Get, new { enctype = "multipart/form-data" }))
+            {
+                <input type="submit" class="btn btn-dark reportsbtn" value="Reset" />
+            }
+        </div>
+    </div>
+    
+
+</div>
+<div style="clear:both;"/>
+
+
+<div style="margin-top:50px">
+    @foreach (ReportHost host in Model.ReportHosts)
+    {
+        <div style="float:left;margin:10px;">
+            <h6 class="reporthostheader">@host.Hostname</h6>
+            <select class="form-select" size="@(host.ICMPStats.ToList().Count > 15 ? 15 : host.ICMPStats.Count())">
+                @foreach (var item in host.ICMPStats_Descending)
+                {
+                    <option value="@item.Key">@item.Key - @item.Value ms</option>
+                }
+            </select>
+            <h6 class="reporthostheader">@host.ICMPStats.Count() points</h6>
+        </div>
+    }
+</div>
+
+
+
+<script src="/Scripts/canvasjs.min.js"></script>
+<script>
+    window.onload = function () {
+
+        $('.datetimepicker').datetimepicker()
+
+        RefreshHostnamesHiddenField();
+
+        AddSelectedHostDblClickHandler();
+
+        $('#hosts_select_list').tooltip({ title: "Double Click - load just one item", animation: true, placement: "bottom", delay: { show: 1000, hide: 50 } });
+
+
+        LoadFilterStates();
+
+        AutoDisableFields();
+
+        if ($('#show_chart').prop('checked')) {
+            LoadChart();
+        }
+        else { $('#chartContainer').hide(); }
+	}
+
+
+    function LoadChart() {
+
+        var chart_lines = [];
+ 	    @foreach (ReportHost host in @Model.ReportHosts)
+        {	<text>
+
+            chart_lines.push({
+                type: "line",
+                name: "@Html.Raw(host.Hostname)",
+                showInLegend: true,
+                dataPoints: @Html.Raw(host.ChartDataPointsString)
+                });
+
+		    </text>
+        }
+
+
+        if (chart_lines.length === 0) {
+            $('#chartContainer').hide();
+        }
+        else {
+
+            var chart = new CanvasJS.Chart("chartContainer", {
+                animationEnabled: true,
+                theme: "dark1",
+                legend: {
+                    fontColor: "White", fontStyle: "normal", fontFamily: "calibri", fontWeight: "normal", fontSize: 16
+                },
+
+                title: {
+                    text: "Hosts ICMP Answer time (ms)",
+                    fontColor: "White", fontStyle: "normal", fontFamily: "calibri", fontWeight: "normal", fontSize: 23
+                },
+                toolTip: {
+                    shared: true
+                },
+                data: chart_lines
+            });
+
+
+            chart.render();
+        }
+    }
+
+
+    function AddHostsToSelectForm(myform) {
+        var hostname = myform.elements["hostname"].value;
+        if (hostname !== "") {
+            myform.elements["hosts_select_list"].append(new Option(hostname, hostname, true, true));
+        }
+
+
+        RefreshHostnamesHiddenField();
+        AddSelectedHostDblClickHandler();
+    }
+
+    function RemoveSelectedHost() {
+
+        $('#hosts_select_list option:selected').each(function () {
+            $(this).remove();
+        });
+
+
+        RefreshHostnamesHiddenField();
+    }
+
+
+    function RefreshHostnamesHiddenField() {
+        var x = document.getElementById("hosts_select_list");
+        let hosts_string = "";
+        for (var i = 0; i < x.length; i++) {
+            hosts_string += x[i].value + ";";
+        }
+
+        document.getElementById("hostnames").value = hosts_string;
+    }
+
+
+    function AddSelectedHostDblClickHandler() {
+        $('#hosts_select_list option').dblclick(function () {
+            document.getElementById("hostnames").value = $("#hosts_select_list option:selected").val();
+            $("#load_icmp_form").submit();
+        });
+    }
+
+    function AutoDisableFields() {
+
+        //Autohdisable field
+        if ($("#failed_only").is(":checked")) { $("#answer_time").prop("disabled", true); $("#answer_time_sign").prop("disabled", true); } else { $("#answer_time").prop("disabled", false); $("#answer_time_sign").prop("disabled", false); }
+        if ($("#auto_scaling").is(":checked")) { $("#scaling_index").prop("disabled", true); } else { $("#scaling_index").prop("disabled", false);  }
+    }
+
+
+    function SaveFilterStates() {
+        setCookie("ReportDateFrom", $("#date_from").val(), 1);
+        setCookie("ReportDateTo", $("#date_to").val(), 1);
+        setCookie("ReportAnswerTimeSign", $("#answer_time_sign").val(), 1);
+        setCookie("ReportAnswerTime", $("#answer_time").val(), 1);
+        setCookie("ReportFailedOnly", $("#failed_only").is(":checked"), 1);
+        setCookie("ReportAutoScaling", $("#auto_scaling").is(":checked"), 1);
+        setCookie("ReportAutoScalingIndex", $("#scaling_index").val(), 1);
+
+        setCookie("ReportShowChart", $("#show_chart").is(":checked"), 1);
+    }
+
+    function LoadFilterStates() {
+
+        var date = new Date();
+        date.setHours(0);
+        date.setMinutes(0);
+        date.setSeconds(0);
+        LoadTextBox("ReportDateFrom", "#date_from", date.toLocaleString());
+
+        date.setHours(23);
+        date.setMinutes(59);
+        date.setSeconds(59);
+        LoadTextBox("ReportDateTo", "#date_to", date.toLocaleString());
+
+        LoadTextBox("ReportAnswerTimeSign", "#answer_time_sign", ">=");
+        LoadTextBox("ReportAnswerTime", "#answer_time", 0);
+        LoadCheckBox("ReportFailedOnly", "#failed_only", false);
+        LoadCheckBox("ReportAutoScaling", "#auto_scaling", true);
+        LoadTextBox("ReportAutoScalingIndex", "#scaling_index", 1);
+
+
+        LoadCheckBox("ReportShowChart", "#show_chart", true);
+
+
+        function LoadTextBox(cookiename, textbox, defaultvalue) {
+            if (getCookie(cookiename) !== "") { $(textbox).val(getCookie(cookiename)); }
+            else {
+                $(textbox).val(defaultvalue);
+                setCookie(cookiename, defaultvalue, 1);
+            }
+        }
+
+        function LoadCheckBox(cookiename, textbox, defaultvalue) {
+            if (getCookie(cookiename) !== "") { $(textbox).prop("checked", (getCookie(cookiename) === 'true')); }
+            else {
+                $(textbox).prop("checked", defaultvalue);
+                setCookie(cookiename, defaultvalue, 1);
+            }
+        }
+
+    }
+
+    function ShowHideChartContainer() {
+        if ($('#show_chart').prop('checked')) {
+
+            @if (@Model.ReportHosts.Count > 0)
+             {
+                <text>
+                   $('#chartContainer').show();
+                </text>
+             }             
+        }                    
+        else { $('#chartContainer').hide(); }
+    }
+
+</script>

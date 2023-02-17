@@ -464,5 +464,35 @@ namespace SPM_WebClient.Models
                 catch { throw new Exception("WebClient Api Connection Error in Monitoring Controller. API: Update data PUT Action."); }
             }
         }
+
+
+        public List<ReportHost> GetReportHosts(DateTime load_date_from, DateTime load_date_to, Operators load_answer_time_sign, int load_answer_time, string[] load_hostnames, bool load_failed_only, bool load_auto_scaling, int load_scaling_index)
+        {
+            List<ReportHost> result = new List<ReportHost>();
+
+            using (WebClient wc = new WebClient())
+            {
+                wc.Encoding = Encoding.UTF8;
+
+                string reportParams = JsonConvert.SerializeObject(new {
+                    load_date_from = load_date_from,
+                    load_date_to = load_date_to,
+                    load_answer_time_sign = load_answer_time_sign,
+                    load_answer_time = load_answer_time,
+                    load_hostnames = load_hostnames,
+                    load_failed_only = load_failed_only,
+                    load_auto_scaling = load_auto_scaling,
+                    load_scaling_index = load_scaling_index });
+
+                wc.Headers.Add("api_token", apikey);
+                wc.Headers.Add("params_json", reportParams);
+                
+                string JSON = wc.DownloadString(url + "/api/Reports");
+
+                result = JsonConvert.DeserializeObject<List<ReportHost>>(JSON);
+            }
+
+            return result;
+        }
     }
 }
