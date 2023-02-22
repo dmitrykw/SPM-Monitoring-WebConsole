@@ -16,7 +16,10 @@
         public static string ApiKey => ini_manager.GetPrivateString("APICONFIG", "api_key");
         public static bool IsReadOnly => (ini_manager.GetPrivateString("APICONFIG", "readonly").ToLower() == "true") ? true : false;
 
-        
+        //Using for Reporting to pass universal format in parameters;
+        public static string DateTimeFormat = "dd/MM/yyyy HH:mm:ss";
+
+
 
 
     }

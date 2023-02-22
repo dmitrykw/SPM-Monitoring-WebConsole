@@ -42,7 +42,7 @@
 			timeFormat: 'HH:mm',
 			timeSuffix: '',
 			timeOnlyTitle: 'Choose Time',
-			timeText: '', //!!!!! Label 'Time Removed from here'
+			timeText: 'Time',
 			hourText: 'Hour',
 			minuteText: 'Minute',
 			secondText: 'Second',

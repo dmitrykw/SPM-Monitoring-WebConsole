@@ -212,6 +212,38 @@
             ShowHideControls();
         }
         // End Show Hide Controls
+
+
+        //Check is number in a text field or not
+        //Accept 1 or 2 arguments. If call with 1 arg - then is value, if call with 2 args - then 1st is a value, 2nd - is a html element.
+        function CheckInt() { 
+            if (arguments.length === 1) {
+                let value = arguments[0];
+                if ((value.toString() === parseInt(value, 10).toString()) && value >= 0 && value <= 99999) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
+            else if (arguments.length === 2) {
+                let value = arguments[0];
+                let element = arguments[1];
+                if ((value.toString() === parseInt(value, 10).toString()) && value >= 0 && value <= 99999) {
+                    if (element.classList.contains('wrong_input')) {
+                        element.classList.remove('wrong_input');
+                    }
+                    return true;
+                }
+                else {
+                    element.classList.add('wrong_input');
+                    return false;
+                }
+            }
+            
+        }
+
+    
     </script>
 
     @RenderSection("scripts", required: false)

@@ -41,5 +41,8 @@ namespace SPM_WebClient.Models
 
         public IEnumerable<KeyValuePair<DateTime, int?>> ICMPStats_Descending => ICMPStats.OrderByDescending(x => x.Key);
         public string ChartDataPointsString => JsonConvert.SerializeObject(chart_data_points);
+
+        public double? AverageAnswerTime { get; set; }
+        public double? UpTime { get; set; }
     }
 }

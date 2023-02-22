@@ -2,6 +2,7 @@
 using SPM_WebClient.Models;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -9,15 +10,18 @@ using System.Web.Mvc;
 namespace SPM_WebClient.Controllers
 {
     public class ReportsController : Controller
-    {
+    {        
         // GET: Reports
-        public ActionResult Index(DateTime? date_from = null, DateTime? date_to = null, string answer_time_sign = null, string answer_time = null, string hostnames = null, string failed_only = null, string auto_scaling = null, string scaling_index = null)
+        public ActionResult Index(string date_from = null, string date_to = null, string answer_time_sign = null, string answer_time = null, string hostnames = null, string failed_only = null, string auto_scaling = null, string scaling_index = null)
         {
 
             #region Params handling
-
-            DateTime load_date_from = date_from ?? DateTime.Now;
-            DateTime load_date_to = date_to ?? DateTime.Now;
+            
+            DateTime load_date_from = DateTime.Now;
+            DateTime load_date_to = DateTime.Now;
+            DateTime.TryParseExact(date_from, App_Globals.DateTimeFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, out load_date_from);
+            DateTime.TryParseExact(date_to, App_Globals.DateTimeFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, out load_date_to);
+           
 
             Operators load_answer_time_sign = Operators.None;
             if (!string.IsNullOrEmpty(answer_time_sign))

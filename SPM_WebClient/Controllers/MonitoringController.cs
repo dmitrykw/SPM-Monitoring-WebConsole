@@ -128,6 +128,7 @@ namespace SPM_WebClient.Controllers
             HttpCookie cookie = new HttpCookie(cookie_name);
             cookie.Value = cookie_value;
             cookie.Expires = DateTime.Now.AddDays(7);
+            cookie.SameSite = SameSiteMode.Lax;
 
             Response.Cookies.Add(cookie);
 

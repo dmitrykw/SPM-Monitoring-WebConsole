@@ -21,5 +21,7 @@ namespace SPM_WebClient.Models
         {
             ReportHosts = reportHosts;            
         }
+
+        public string DateTimeFormat => App_Globals.DateTimeFormat;
     }    
 }

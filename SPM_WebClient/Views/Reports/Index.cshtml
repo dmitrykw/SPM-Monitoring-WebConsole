@@ -1,4 +1,5 @@
 ﻿@using SPM_WebClient.Models
+@model SPM_WebClient.Models.ReportsViewModel
 
 @{
     ViewBag.Title = "Reports";
@@ -6,13 +7,15 @@
 }
 
 <div style="color:lightgray;margin-left:150px">@Model.ConnectionErrorHeader</div>
-<div id="readonly_mode_word"><h3>@((Model.IsReadOnly == true) ? "ReadOnly Mode" : "")</h3></div>
+<div id="readonly_mode_word"><h3>@((@Model.IsReadOnly == true) ? "ReadOnly Mode" : "")</h3></div>
 
-<div id="chartContainer" style="height: 370px; width: 97%;"></div>
-
-<div style="float: right; margin: 30px; margin-right:40px">
-        <input type="checkbox" name="show_chart" id="show_chart" class="form-check-input" style="margin-top:7px" onchange="ShowHideChartContainer()"/>
-        <label class="form-check-label groupbox" for="show_chart">Show Chart</label>
+<div id="chart-div">
+    <div id="chartContainer"></div>
+    <div class="chart_decor">Select area for zoom</div>    
+</div>
+<div id="show-chart-div">
+    <input type="checkbox" name="show_chart" id="show_chart" class="form-check-input" style="margin-top:7px" onchange="LoadOrHideChart()" />
+    <label class="form-check-label groupbox" for="show_chart" data-toggle="tooltip" title="Show/Hide the chart">Show Chart</label>
 </div>
 
 <div style="margin-top:50px">
@@ -20,8 +23,8 @@
     <form onsubmit="return false">
         <div>
             <div style="float:left"><label class="groupbox">Hostname/IP:</label></div>
-            <div style="margin-left:10px;float:left; margin-top:5px"><input type="text" id="hostname" name="hostname" class="form-control" style="width:150px;height:19px; padding:2px;" /></div>
-            <button class="btn btn-dark reportsbtn" onclick="AddHostsToSelectForm(this.form)">Add to list</button>
+            <div style="margin-left:10px;float:left; margin-top:5px"><input type="text" id="hostname" name="hostname" class="form-control" style="width:150px;height:19px; padding:2px;" data-toggle="tooltip" title="Copy-Paste hostname/ip of the host that you need get icmp data, and push add to list button" /></div>
+            <button class="btn btn-dark reportsbtn" onclick="AddHostsToSelectForm(this.form)" data-toggle="tooltip" title="Copy-Paste hostname/ip of the host that you need get icmp data, and push add to list button">Add to list</button>
         </div>
         <div style="float:left;margin:10px;">
             <h6 class="reporthostheader">Hosts:</h6>
@@ -41,25 +44,25 @@
             {
                 <div style="float:left">
                     <input type="hidden" id="hostnames" name="hostnames" />
-                    <input id="load_all_btn" type="submit" class="btn btn-dark reportsbtn" value="Load ICMP Data for All" onclick="SaveFilterStates();"/>
+                    <input id="load_all_btn" type="submit" class="btn btn-dark reportsbtn" value="Load ICMP Data for All" onclick="SaveFilterStates();" data-toggle="tooltip" title="Load data for hosts in this list" />
                 </div>
                 <div>
                     <table>
                         <tr>
                             <td>
                                 <div style="float:left"><label class="groupbox">Date From:</label></div>
-                                <div style="margin-left:10px;float:left; margin-top:5px"><input type="text" readonly="readonly" id="date_from" name="date_from" class="form-control datetimepicker" /></div>
+                                <div style="margin-left:10px;float:left; margin-top:5px"><input type="text" readonly="readonly" id="date_from" name="date_from" class="form-control datetimepicker" data-toggle="tooltip" title="Load ICMP Data seince this Date and Time" /></div>
 
                             </td>
                             <td>
                                 <div style="float:left"><label class="groupbox">Date To:</label></div>
-                                <div style="margin-left:10px;float:left; margin-top:5px"><input type="text" readonly="readonly" id="date_to" name="date_to" class="form-control datetimepicker" /></div>
+                                <div style="margin-left:10px;float:left; margin-top:5px"><input type="text" readonly="readonly" id="date_to" name="date_to" class="form-control datetimepicker" data-toggle="tooltip" title="Load ICMP Data before this Date and Time" /></div>
                             </td>
                         </tr>
                         <tr>
                             <td>
                                 <div style="float:left"><label class="groupbox">Answer Time(ms):</label></div>
-                                <select style="float: left; " class="form-select form-select-sm inlineselect" id="answer_time_sign" name="answer_time_sign">
+                                <select style="float: left; " class="form-select form-select-sm inlineselect" id="answer_time_sign" name="answer_time_sign" data-toggle="tooltip" title="Select filter condition sign">
                                     <option value=">">></option>
                                     <option selected value=">=">>=</option>
                                     <option value="<"><</option>
@@ -67,24 +70,24 @@
                                     <option value="=">=</option>
                                     <option value="<>"><></option>
                                 </select>
-                                <div style="margin-left:10px;float:left;"><input type="text" id="answer_time" name="answer_time" class="form-control" style="width:40px;height:23px; " /></div>
+                                <div style="margin-left:10px;float:left;"><input type="text" id="answer_time" name="answer_time" class="form-control" style="width:50px;height:23px;" onfocus="StoreFocusedValue(this.value);" onchange="CheckIsNumber(this);" data-toggle="tooltip" title="Select filter condition" /></div>
 
                             </td>
                             <td>
-                                <input type="checkbox" name="failed_only" id="failed_only" class="form-check-input" style="margin-top:7px" onchange="AutoDisableFields()"/>
-                                <label style="margin-top:3px" class="form-check-label groupbox" for="failed_only">Show FAILED points only</label>
+                                <input type="checkbox" name="failed_only" id="failed_only" class="form-check-input" style="margin-top:7px" onchange="AutoDisableFields()" />
+                                <label style="margin-top:3px" class="form-check-label groupbox" for="failed_only" data-toggle="tooltip" title="Show points when the host was unavailable">Show FAILED points only</label>
                             </td>
                         </tr>
                         <tr>
                             <td>
                                 <div style="float:left">
-                                    <input type="checkbox" name="auto_scaling" id="auto_scaling" class="form-check-input" style="margin-top:7px" onchange="AutoDisableFields()"/>
-                                    <label style="margin-top:3px" class="form-check-label groupbox" for="auto_scaling">Auto Scaling</label>
+                                    <input type="checkbox" name="auto_scaling" id="auto_scaling" class="form-check-input" style="margin-top:7px" onchange="AutoDisableFields()" />
+                                    <label style="margin-top:3px" class="form-check-label groupbox" for="auto_scaling" data-toggle="tooltip" title="Automatically remove intermediate points to reduce chart">Auto Scaling</label>
                                 </div>
-                                <div style="float:left"><label class="groupbox">Manual scaling: Add only each</label></div>
+                                <div style="float:left"><label class="groupbox" data-toggle="tooltip" title="If your output result is to large you can try to skip some intermediate points.">Manual scaling: Add only each</label></div>
                             </td>
                             <td>
-                                <select style="float: left; " class="form-select form-select-sm inlineselect" id="scaling_index" name="scaling_index">
+                                <select style="float: left; " class="form-select form-select-sm inlineselect" id="scaling_index" name="scaling_index" data-toggle="tooltip" title="For example '2' - add only EACH SECOND point (output = 1/2 of all points), '3' - add only EACH THIRD point (output = 1/3 of all points).">
                                     <option value="1">1</option>
                                     <option value="2">2</option>
                                     <option value="3">3</option>
@@ -95,28 +98,28 @@
                                     <option value="8">8</option>
                                     <option value="9">9</option>
                                 </select>
-                                <div style="float:left"><label class="groupbox">point (and remove intermediate)</label></div>
+                                <div style="float:left"><label class="groupbox" data-toggle="tooltip" title="If your output result is to large you can try to skip some intermediate points.">point (and remove intermediate)</label></div>
 
                             </td>
                         </tr>
                     </table>
-                </div>                                
+                </div>
             }
         </div>
         <div style="margin-top:-40px">
-            <input type="submit" class="btn btn-dark reportsbtn" value="Remove Selected" onclick="RemoveSelectedHost()" />
+            <input type="submit" class="btn btn-dark reportsbtn" value="Remove Selected" onclick="RemoveSelectedHost()" data-toggle="tooltip" title="Remove selected item from the list" />
         </div>
         <div style="margin-top:5px">
             @using (Html.BeginForm("Index", "Reports", FormMethod.Get, new { enctype = "multipart/form-data" }))
             {
-                <input type="submit" class="btn btn-dark reportsbtn" value="Reset" />
+                <input type="submit" class="btn btn-dark reportsbtn" value="Reset" data-toggle="tooltip" title="Reset list" />
             }
         </div>
     </div>
-    
+
 
 </div>
-<div style="clear:both;"/>
+<div style="clear:both;" />
 
 
 <div style="margin-top:50px">
@@ -127,39 +130,101 @@
             <select class="form-select" size="@(host.ICMPStats.ToList().Count > 15 ? 15 : host.ICMPStats.Count())">
                 @foreach (var item in host.ICMPStats_Descending)
                 {
-                    <option value="@item.Key">@item.Key - @item.Value ms</option>
+                    <option value="@item.Key">@item.Key.ToString(@Model.DateTimeFormat) - @item.Value ms</option>
                 }
             </select>
-            <h6 class="reporthostheader">@host.ICMPStats.Count() points</h6>
+            <h6 class="reporthostfooter">Points: @host.ICMPStats.Count()</h6>
+            <h6 class="reporthostfooter">Avr Answer: @(host.AverageAnswerTime??0) ms</h6>
+            <h6 class="reporthostfooter">Uptime: @(host.UpTime??0) %</h6>
         </div>
     }
 </div>
 
 
+<!-- Waiting Modal -->
+<div class="modal fade" id="waiting-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-body">
+                <p>Data Loading... Please Wait...<p>
+                <div id="loader_animation"></div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script src="/Scripts/canvasjs.min.js"></script>
 <script>
-    window.onload = function () {
 
-        $('.datetimepicker').datetimepicker()
+    window.chart_loaded = false;
+    window.cur_focused_value = "";
+
+    window.onload = function () {
+        $.ajaxSetup({ cache: false });
+
+        //window.addEventListener('load', function () {
+        //    var loader = document.getElementById('loader_animation');
+        //    loader.style.display = 'none';
+        //});
+
+
+        $('#chart-div').hide();
+        
+
+        //ToolTips
+        $('[data-toggle="tooltip"]').tooltip({
+            placement: 'top',
+            delay: { show: 2000, hide: 50 }
+        });
+        $('#hosts_select_list').tooltip({ title: "Double Click - load just one item", animation: true, placement: "bottom", delay: { show: 1000, hide: 50 } });
+
+
+        $('.datetimepicker').datetimepicker({
+            timeText: '',
+            hourText: 'Hours',
+            minuteText: 'Minutes',
+            secondText: 'Seconds',
+            currentText: 'Get Now',
+            closeText: 'Apply',
+            dateFormat: "dd/mm/yy",
+            firstDay: 1,
+            timeFormat: "HH:mm:ss"
+        });
+
 
         RefreshHostnamesHiddenField();
 
         AddSelectedHostDblClickHandler();
-
-        $('#hosts_select_list').tooltip({ title: "Double Click - load just one item", animation: true, placement: "bottom", delay: { show: 1000, hide: 50 } });
 
 
         LoadFilterStates();
 
         AutoDisableFields();
 
-        if ($('#show_chart').prop('checked')) {
-            LoadChart();
-        }
-        else { $('#chartContainer').hide(); }
+
+        LoadOrHideChart();
 	}
 
+    function LoadOrHideChart() {
+        if ($('#show_chart').prop('checked')) {
+
+            @if (@Model.ReportHosts.Any(item => item.ICMPStats.Any()))
+            {               
+                <text>
+                    $('#chart-div').show()
+                 if (!window.chart_loaded) { LoadChart(); window.chart_loaded = true; }
+                    
+                </text>
+            }
+            else
+            {
+                <text>
+                    $('#chart-div').hide();
+                </text>
+            }
+        }
+        else { $('#chart-div').hide(); }
+    }
 
     function LoadChart() {
 
@@ -178,36 +243,37 @@
         }
 
 
-        if (chart_lines.length === 0) {
-            $('#chartContainer').hide();
-        }
-        else {
+        var chart = new CanvasJS.Chart("chartContainer", {
+            animationEnabled: true,
+            zoomEnabled: true,
+            theme: "dark1",
+            backgroundColor: "#29292d",
+            legend: {
+                fontColor: "White", fontStyle: "normal", fontFamily: "calibri", fontWeight: "normal", fontSize: 16
+            },
+            axisY: {
+                suffix: "ms"
+            },
+            title: {
+                text: "Hosts ICMP Answer time (ms)",
+                fontColor: "White", fontStyle: "normal", fontFamily: "calibri", fontWeight: "normal", fontSize: 23
+            },
+            toolTip: {
+                shared: true
+            },
+            data: chart_lines
+        });
 
-            var chart = new CanvasJS.Chart("chartContainer", {
-                animationEnabled: true,
-                theme: "dark1",
-                legend: {
-                    fontColor: "White", fontStyle: "normal", fontFamily: "calibri", fontWeight: "normal", fontSize: 16
-                },
 
-                title: {
-                    text: "Hosts ICMP Answer time (ms)",
-                    fontColor: "White", fontStyle: "normal", fontFamily: "calibri", fontWeight: "normal", fontSize: 23
-                },
-                toolTip: {
-                    shared: true
-                },
-                data: chart_lines
-            });
+        chart.render();
 
 
-            chart.render();
-        }
+        $(".canvasjs-chart-credit").hide();
     }
 
 
     function AddHostsToSelectForm(myform) {
-        var hostname = myform.elements["hostname"].value;
+        var hostname = myform.elements["hostname"].value.trim();
         if (hostname !== "") {
             myform.elements["hosts_select_list"].append(new Option(hostname, hostname, true, true));
         }
@@ -229,11 +295,17 @@
 
 
     function RefreshHostnamesHiddenField() {
-        var x = document.getElementById("hosts_select_list");
+
+        const uniqueArr = new Set();
+        $("#hosts_select_list option").each(function () {
+            uniqueArr.add(this.value);
+        });
+
+
         let hosts_string = "";
-        for (var i = 0; i < x.length; i++) {
-            hosts_string += x[i].value + ";";
-        }
+        uniqueArr.forEach((value, index, array) => {
+            hosts_string += value + ";";
+        });
 
         document.getElementById("hostnames").value = hosts_string;
     }
@@ -241,7 +313,8 @@
 
     function AddSelectedHostDblClickHandler() {
         $('#hosts_select_list option').dblclick(function () {
-            document.getElementById("hostnames").value = $("#hosts_select_list option:selected").val();
+            document.getElementById("hostnames").value = $("#hosts_select_list option:selected").val().trim();
+            SaveFilterStates();
             $("#load_icmp_form").submit();
         });
     }
@@ -264,6 +337,8 @@
         setCookie("ReportAutoScalingIndex", $("#scaling_index").val(), 1);
 
         setCookie("ReportShowChart", $("#show_chart").is(":checked"), 1);
+
+        $('#waiting-modal').modal('show');
     }
 
     function LoadFilterStates() {
@@ -272,12 +347,12 @@
         date.setHours(0);
         date.setMinutes(0);
         date.setSeconds(0);
-        LoadTextBox("ReportDateFrom", "#date_from", date.toLocaleString());
+        LoadTextBox("ReportDateFrom", "#date_from", date.toLocaleString('en-UK').replace(',', ''));
 
         date.setHours(23);
         date.setMinutes(59);
         date.setSeconds(59);
-        LoadTextBox("ReportDateTo", "#date_to", date.toLocaleString());
+        LoadTextBox("ReportDateTo", "#date_to", date.toLocaleString('en-UK').replace(',',''));
 
         LoadTextBox("ReportAnswerTimeSign", "#answer_time_sign", ">=");
         LoadTextBox("ReportAnswerTime", "#answer_time", 0);
@@ -297,27 +372,27 @@
             }
         }
 
-        function LoadCheckBox(cookiename, textbox, defaultvalue) {
-            if (getCookie(cookiename) !== "") { $(textbox).prop("checked", (getCookie(cookiename) === 'true')); }
+        function LoadCheckBox(cookiename, checkbox, defaultvalue) {
+            if (getCookie(cookiename) !== "") { $(checkbox).prop("checked", (getCookie(cookiename) === 'true')); }
             else {
-                $(textbox).prop("checked", defaultvalue);
+                $(checkbox).prop("checked", defaultvalue);
                 setCookie(cookiename, defaultvalue, 1);
             }
         }
-
     }
 
-    function ShowHideChartContainer() {
-        if ($('#show_chart').prop('checked')) {
-
-            @if (@Model.ReportHosts.Count > 0)
-             {
-                <text>
-                   $('#chartContainer').show();
-                </text>
-             }             
-        }                    
-        else { $('#chartContainer').hide(); }
+    function StoreFocusedValue(value) {
+        window.cur_focused_value = value;
     }
+
+
+    function CheckIsNumber(inputField) {
+       
+        if (!CheckInt(inputField.value)) {
+            alert("Check the filter. The answer Time field is not a number. It will be set to 0 by default.");
+            inputField.value = window.cur_focused_value; //restore previous value           
+        }
+    }
+
 
 </script>
