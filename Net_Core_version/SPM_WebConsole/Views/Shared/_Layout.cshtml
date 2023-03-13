@@ -1,0 +1,261 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - SPM Web Console</title>
+    <link rel="shortcut icon" type="image/x-icon" href="~/favicon.ico">
+    <link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/jquery-ui-dist/jquery-ui.css" />
+    <link rel="stylesheet" href="~/lib/jquery-ui-dist/jquery-ui-timepicker-addon.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/SPM_WebConsole.styles.css" asp-append-version="true" />
+</head>
+<body onload="setTimeout('document.location.reload();', 120000);">
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark controls" style="background-color: transparent; height: 65px;">
+
+            <div style="float:left;margin-top:15px; margin-left:5px">
+                @Html.ActionLink("Logo", "Index", "Monitoring", null, new { @class = "mylogo" })
+            </div>
+            @Html.ActionLink("SPM Web Console", "Index", "Monitoring", new { area = "" }, new { @class = "navbar-brand", @style = "color:#a1a1a3;" })
+            <div class="container-fluid">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">@Html.ActionLink("Monitoring", "Index", "Monitoring", null, new { @class = "nav-link", @id = "monitoring-navlink" })</li>
+                        <li class="nav-item">@Html.ActionLink("Options", "Index", "Options", null, new { @class = "nav-link", @id = "options-navlink" })</li>
+                        <li class="nav-item">@Html.ActionLink("Reports", "Index", "Reports", null, new { @class = "nav-link", @id = "reports-navlink" })</li>
+                        <li class="nav-item">@Html.ActionLink("About", "About", "Home", null, new { @class = "nav-link", @id = "about-navlink" })</li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="body-content">
+        <main role="main" >
+            @RenderBody()
+            
+        </main>
+    </div>
+    <footer class="footer">
+        <p style="float:right; width:200px;">&copy; @DateTime.Now.Year - SPM Web Console</p>
+    </footer>
+    
+    
+    
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery-ui-dist/jquery-ui.js"></script>
+    <script src="~/lib/jquery-ui-dist/jquery-ui-timepicker-addon.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <script type="text/javascript">
+
+        $(function () {
+            $.ajaxSetup({ cache: false });
+
+
+            //Navigation links highliths activate
+            var currentURL = window.location.href;
+            if (currentURL.toLocaleLowerCase().includes("options")) {
+                $('#options-navlink').addClass("active");
+            }
+            else if (currentURL.toLocaleLowerCase().includes("reports")) {
+                $('#reports-navlink').addClass("active");
+            }
+            else if (currentURL.toLocaleLowerCase().includes("about")) {
+                $('#about-navlink').addClass("active");
+            }
+            else {
+                $('#monitoring-navlink').addClass("active");
+            }
+
+
+            $(".details_btn").click(function (e) {
+
+                e.preventDefault();
+                $.get(this.href, function (data) {
+                    $('#dialogContent').html(data);
+                    $('#modDialog').modal('show');
+                });
+            });
+
+            $(".sortable").sortable(
+                {
+                    update: function (event, ui) {
+
+                        var IDs_string = "";
+
+                        $('.hostslist_div').children('div').each(function () {
+                            IDs_string += ($(this).attr("id")) + ","
+                        });
+
+                        IDs_string = IDs_string.substring(0, IDs_string.length - 1);
+
+                        updateSortedHosts(IDs_string)
+
+                    }
+                });
+            $(".sortable").disableSelection();
+
+            ShowHideControls(); //Show or Hide Controls on page depends on Cookie
+        })
+
+
+
+        function updateHostFields(myform) {
+
+            var dataToPost = {};
+
+            dataToPost.hostname = myform.elements["hostname"].value;
+            dataToPost.description = myform.elements["description"].value;
+            dataToPost.groupname = myform.elements["groupname"].value;
+            dataToPost.selectedgroupname = myform.elements["selectedgroupname"].value;
+            dataToPost.hostid = myform.elements["hostid"].value;
+            dataToPost.isnotifyenabled = myform.elements["isnotifyenabled"].checked;
+            dataToPost.isenabled = myform.elements["isenabled"].checked;
+
+            $.post("@Url.Action("Index", "Monitoring")", { model: dataToPost }, function (data) {
+                if (data.status == 0) {
+                    alert(data.message);
+                }
+            });
+        }
+
+        function updateHostPicture(myform) {
+
+            var dataToPost = {};
+
+            dataToPost.hostid = myform.elements["hostid"].value;
+            dataToPost.imgpath = myform.elements["imgpath"].value;
+
+            $.post("@Url.Action("Index", "Monitoring")", { model: dataToPost }, function (data) {
+                if (data.status == 0) {
+                    alert(data.message);
+                }
+                else {
+                    if (dataToPost.imgpath == "defaultmonitor") {
+                        setTimeout(() => { location.reload(); }, 1500);
+
+                    } else {
+                        myform.elements["imgpath"].parentElement.parentElement.parentElement.style.backgroundImage = "url('/Content/Images/" + dataToPost.imgpath + "')";
+                    }
+                }
+            });
+        }
+
+
+        function updateSortedHosts(ids_string) {
+            var dataToPost = {};
+
+            dataToPost.ids_string = ids_string;
+
+
+            $.post("@Url.Action("PostSortedIDs", "Monitoring")", { model: dataToPost }, function (data) {
+                if (data.status == 0) {
+                    alert(data.message);
+                }
+            });
+        }
+
+
+
+
+        //Cookies for JS
+        function setCookie(cname, cvalue, exdays) {
+            const d = new Date();
+            d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+            let expires = "expires=" + d.toUTCString();
+            document.cookie = cname + "=" + cvalue + ";" + expires + ";SameSite=Lax;Secure;path=/";
+        }
+
+        function getCookie(cname) {
+            let name = cname + "=";
+            let ca = document.cookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return "";
+        }
+        //End Cookies for JS
+
+
+        // Show Hide Controls
+        function ShowHideControls() {
+
+            if (getCookie('ShowHideControls') === "Show") {
+                $(".controls").show();
+                $(".hostslist_div").css("margin-left", "205px");
+                $("#ShowHideLabelText").text("Swith to Less Controls");
+            }
+            else if (getCookie('ShowHideControls') === "Hide") {
+                $(".controls").hide();
+                $(".hostslist_div").css("margin-left", "0px");
+                $("#ShowHideLabelText").text("Swith to All Controls");
+            }
+        }
+
+        function SwitchShowHideControls() {
+            if (getCookie('ShowHideControls') === "Hide") {
+                setCookie('ShowHideControls', 'Show', 7);
+            }
+            else {
+                setCookie('ShowHideControls', 'Hide', 7);
+            }
+            ShowHideControls();
+        }
+        // End Show Hide Controls
+
+
+        //Check is number in a text field or not
+        //Accept 1 or 2 arguments. If call with 1 arg - then is value, if call with 2 args - then 1st is a value, 2nd - is a html element.
+        function CheckInt() {
+            if (arguments.length === 1) {
+                let value = arguments[0];
+                if ((value.toString() === parseInt(value, 10).toString()) && value >= 0 && value <= 99999) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
+            else if (arguments.length === 2) {
+                let value = arguments[0];
+                let element = arguments[1];
+                if ((value.toString() === parseInt(value, 10).toString()) && value >= 0 && value <= 99999) {
+                    if (element.classList.contains('wrong_input')) {
+                        element.classList.remove('wrong_input');
+                    }
+                    return true;
+                }
+                else {
+                    element.classList.add('wrong_input');
+                    return false;
+                }
+            }
+
+        }
+
+
+    </script>
+
+    @RenderSection("Scripts", required: false)
+    <!-- @@await RenderSectionAsync("Scripts", required: false) -->
+</body>
+</html>

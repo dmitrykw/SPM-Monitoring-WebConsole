@@ -1,0 +1,196 @@
+﻿@using SPM_WebConsole.Models
+
+@{
+    ViewBag.Title = "Monitoring";
+}
+
+<h1 class="page_title">Monitoring</h1>
+
+<div id="modDialog" class="modal fade">
+    <div id="dialogContent" class="modal-dialog"></div>
+</div>
+<div style="color:lightgray;margin-left:150px">@Model.ConnectionErrorHeader</div>
+<div style="float:right; margin-top:-45px">
+
+    <div style="float:left;margin-top:10px; margin-right:70px">
+
+        <div style="float:left"><input type="submit" value="" class="btn btn-info btn-sm" style="height:17px; padding-top: 1px" onclick="SwitchShowHideControls();" /> </div>
+        <div style="float: left; color: #a1a1a3; margin:1px; margin-left:5px"><p id="ShowHideLabelText">Swith to Less Controls</p></div>
+
+    </div>
+
+    <div style="float:left;margin-top:10px; margin-right:70px">
+        @using (Html.BeginForm("SetCookie", "Monitoring", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            <input type="hidden" value="@Model.SelectedGroupName" name="selectedgroupname" , id="selectedgroupname" />
+            <input type="hidden" name="cookie_name" value="ShowHostsFilterLevel" />
+            <input type="hidden" name="cookie_value" value="@(Model.ShowHostsFilterLevel == 0 ? "1" : (Model.ShowHostsFilterLevel == 1 ? "2" : "0"))" />
+
+            <div style="float:left"><input type="submit" value="" class="@(Model.ShowHostsFilterLevel == 0 ? "btn btn-success btn-sm" : (Model.ShowHostsFilterLevel == 1 ? "btn btn-warning btn-sm" : "btn btn-danger btn-sm"))" style="height:17px; padding-top: 1px" /></div>
+            <div style="float: left; color: #a1a1a3; margin:1px; margin-left:5px"> <p>@(Model.ShowHostsFilterLevel == 0 ? "Now Showing All hosts" : (Model.ShowHostsFilterLevel == 1 ? "Now Showing Failed hosts and hosts with active notifications" : "Now Showing Failed hosts only"))</p></div>
+        }
+    </div>
+    <div style="float:left;margin-top:5px">
+        @using (Html.BeginForm("Search", "Monitoring", FormMethod.Get, new { enctype = "multipart/form-data" }))
+        {
+            <div style="float:left"><input type="search" value="@Model.SearchFieldText" name="search_filter" , class="form-control searchtext" placeholder="Search host" style="height:25px; padding-top: 5px" /></div>
+            <div style="float:left;margin-left:5px"><input type="submit" value="Search" class="btn btn-warning" style="height:25px; padding-top: 0px; margin-bottom:5px" /></div>
+        }
+    </div>
+    <div style="float:left; margin-left:100px">
+        <input type="button" class="btn btn-info" value="Refresh" onclick="location.href='@Url.Action("Index", "Monitoring", new { group_filter = @Model.SelectedGroupName})'" />
+    </div>
+</div>
+<div id="readonly_mode_word"><h3>@((Model.IsReadOnly == true) ? "ReadOnly Mode" : "")</h3></div>
+<div>
+    <div class="controls" id="@(Model.Groups.Count > 12 ? "btns_absolute": "btns_fixed")">
+        <div style="float:left">
+            @using (Html.BeginForm("AddHost", "Monitoring", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                <input type="hidden" value="@Model.SelectedGroupName" name="selectedgroupname" , id="selectedgroupname" />
+
+                <input type="hidden" value="hostname or IP" name="hostname" , id="hostname" />
+                <input type="hidden" value="Description" name="description" , id="description" />
+                <input type="hidden" value="Host" name="hosttype" , id="hosttype" />
+                <input type="submit" value="Add IP Host" class="newhostbutton newiphost" />
+            }
+        </div>
+        <div style="float:left">
+            @using (Html.BeginForm("AddHost", "Monitoring", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                <input type="hidden" value="@Model.SelectedGroupName" name="selectedgroupname" , id="selectedgroupname" />
+
+                <input type="hidden" value="http://yoursite.com" name="hostname" , id="hostname" />
+                <input type="hidden" value="Description" name="description" , id="description" />
+                <input type="hidden" value="WebHost" name="hosttype" , id="hosttype" />
+                <input type="submit" value="Add Web host" class="newhostbutton newwebhost" />
+            }
+        </div>
+    </div>
+    <div class="controls" name="GroupsList" id="@(Model.Groups.Count > 12 ? "groups_absolute": "groups_fixed")">
+        <div style="text-align:center; color:#a1a1a3">
+            <h3><b>@Model.GroupsHeader</b></h3>
+        </div>
+        @foreach (Group curr_group in Model.Groups)
+        {
+            <button type="button" class="@(curr_group.IsActivated ? "group_button_selected" : "group_button")" title="@curr_group.Name" onclick="location.href='@Url.Action("Index", "Monitoring", new { group_filter = @curr_group.Name})'">@curr_group.Name</button>
+        }
+    </div>
+    <div name="HostsList" class="hostslist_div sortable">
+        @foreach (Host curr_host in Model.Hosts)
+        {
+
+
+            <div class="monitoring_host_div" id="@curr_host.ID" style="background-image :  url(/Content/Images/@curr_host.ImgPath)">
+                <form>
+                    <div id=monitoring_host_statustext class="@((curr_host.IsEnabled) ? (curr_host.Status ? (curr_host.StatusText.Contains("TO LONG") ? "monitoring_host_statustext_orange" : "monitoring_host_statustext_green") : "monitoring_host_statustext_red") : "monitoring_host_statustext_white")">
+
+                        <input type="hidden" value="@Model.SelectedGroupName" name="selectedgroupname" , id="selectedgroupname" />
+                        <input type="hidden" value="@curr_host.ID" name="hostid" , id="hostid" />
+
+                        <div>
+                            @curr_host.StatusText_0string
+                        </div>
+                        <div>
+                            @curr_host.StatusText_1string
+                        </div>
+                        <div>
+                            @curr_host.StatusText_2string
+                        </div>
+                        <div>
+                            @curr_host.StatusText_3string
+                        </div>
+                        <div>
+                            @curr_host.StatusText_4string
+                        </div>
+                        <div>
+                            @curr_host.StatusText_5string
+                        </div>
+                        <div>
+                            @curr_host.StatusText_6string
+                        </div>
+                        <div>
+                            @curr_host.StatusText_7string
+                        </div>
+                    </div>
+
+                    <!-- <div class="monitoring_host_status_checkbox">@Html.CheckBoxFor(Model => curr_host.Status, new { Name = "status", id = "status" })</div>-->
+                    <div class="monitoring_host_notify_checkbox">Notify @Html.CheckBoxFor(Model => curr_host.IsNotifyEnabled, new { Name = "isnotifyenabled", id = "isnotifyenabled", onclick = "updateHostFields(this.form);" })</div>
+                    <div class="monitoring_host_isenabled_checkbox">Enabled @Html.CheckBoxFor(Model => curr_host.IsEnabled, new { Name = "isenabled", id = "isenabled", onclick = "updateHostFields(this.form);" })</div>
+
+
+
+                    @Html.ActionLink("Details", "Details", new { id = curr_host.ID }, new { @class = "regularbtn details_btn monitoring_host_details" })
+                    @Html.ActionLink("Log", "HostLog", new { id = curr_host.ID }, new { @class = "regularbtn monitoring_host_log" })
+
+
+                    <div class="monitoring_host_hostname @((curr_host.IsEnabled) ? (curr_host.Status ? (curr_host.StatusText.Contains("TO LONG") ? "monitoring_host_orange" : "monitoring_host_green") : "monitoring_host_red") : "monitoring_host_black")">@Html.TextBoxFor(Model => curr_host.Hostname, new { Class = "textboxstyle", Style = "width:187px", Name = "hostname", id = "hostname", placeholder = "hostname/ip", onchange = "updateHostFields(this.form);" })</div>
+                    <div class="monitoring_host_selectpic">
+                        <select class="monitoring_host_combobox @((curr_host.IsEnabled) ? (curr_host.Status ? (curr_host.StatusText.Contains("TO LONG") ? "monitoring_host_orange" : "monitoring_host_green") : "monitoring_host_red") : "monitoring_host_black")" id="imgpath" name="imgpath" onchange="updateHostPicture(this.form);">
+                            <option value="defaultmonitor">Default from Options</option>
+                            <option value="switch.png" selected="@((curr_host.ImgPath.Contains("switch.png")) ? "selected" : null)">Switch</option>
+                            <option value="router.png" selected="@((curr_host.ImgPath.Contains("router.png")) ? "selected" : null)">Router</option>
+                            <option value="wifi.png" selected="@((curr_host.ImgPath.Contains("wifi.png")) ? "selected" : null)">WiFiRouter</option>
+                            <option value="firewall.png" selected="@((curr_host.ImgPath.Contains("firewall.png")) ? "selected" : null)">Firewall</option>
+                            <option value="server.png" selected="@((curr_host.ImgPath.Contains("server.png")) ? "selected" : null)">Server</option>
+                            <option value="vserver.png" selected="@((curr_host.ImgPath.Contains("vserver.png")) ? "selected" : null)">VirtualServer</option>
+                            <option value="ipphone.png" selected="@((curr_host.ImgPath.Contains("ipphone.png")) ? "selected" : null)">IPPhone</option>
+                            <option value="ipcam.png" selected="@((curr_host.ImgPath.Contains("ipcam.png")) ? "selected" : null)">IPCam</option>
+                            <option value="ups.png" selected="@((curr_host.ImgPath.Contains("ups.png")) ? "selected" : null)">UPS</option>
+                            <option value="printer.png" selected="@((curr_host.ImgPath.Contains("printer.png")) ? "selected" : null)">Printer</option>
+                            <option value="storage.png" selected="@((curr_host.ImgPath.Contains("storage.png")) ? "selected" : null)">Storage</option>
+                            <option value="http1.png" selected="@((curr_host.ImgPath.Contains("http1.png")) ? "selected" : null)">Url</option>
+                            <option value="web1.png" selected="@((curr_host.ImgPath.Contains("web1.png")) ? "selected" : null)">Web</option>
+                            <option value="web2.png" selected="@((curr_host.ImgPath.Contains("web2.png")) ? "selected" : null)">www</option>
+                        </select>
+                    </div>
+                    <div class="monitoring_host_description @((curr_host.IsEnabled) ? (curr_host.Status ? (curr_host.StatusText.Contains("TO LONG") ? "monitoring_host_orange" : "monitoring_host_green") : "monitoring_host_red") : "monitoring_host_black")">@Html.TextBoxFor(Model => curr_host.Description, new { Class = "textboxstyle", Style = "width:160px", Name = "description", id = "description", placeholder = "host description", onchange = "updateHostFields(this.form);" })</div>
+                    <div class="monitoring_host_group @((curr_host.IsEnabled) ? (curr_host.Status ? (curr_host.StatusText.Contains("TO LONG") ? "monitoring_host_orange" : "monitoring_host_green") : "monitoring_host_red") : "monitoring_host_black")">@Html.TextBoxFor(Model => curr_host.GroupName, new { Class = "textboxstyle", Style = "width:124px", Name = "groupname", id = "groupname", placeholder = "host groupname", onchange = "updateHostFields(this.form);" })</div>
+
+                </form>
+
+                <div style="float:left; margin-top:-100px; margin-left:5px">
+                    @using (Html.BeginForm("RemoveHost", "Monitoring", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {
+                        <input type="hidden" value="@Model.SelectedGroupName" name="selectedgroupname" , id="selectedgroupname" />
+                        <input type="hidden" value="@curr_host.ID" name="hostid" , id="hostid" />
+                        <input type="submit" value="Delete" class="removehosts_btn" onclick="return confirm('Do you really want to delete this host?')" />
+                    }
+                </div>
+
+            </div>
+
+
+
+
+        }
+    </div>
+</div>
+
+@section scripts
+{
+    <script type="text/javascript">
+
+        $(function () {
+
+            //ToolTips
+            $('.monitoring_host_div').tooltip({ title: "DragAndDrop host to rearrange", animation: true, placement: "top", delay: { show: 3000, hide: 100 } });
+            $('.monitoring_host_hostname').tooltip({ title: "IP or hostname", animation: true, placement: "top", delay: { show: 300, hide: 100 } });
+            $('.monitoring_host_description').tooltip({ title: "Host Description", animation: true, placement: "bottom", delay: { show: 300, hide: 100 } });
+            $('.monitoring_host_group').tooltip({ title: "Host Group name", animation: true, placement: "bottom", delay: { show: 300, hide: 100 } });
+            $('.monitoring_host_status_checkbox').tooltip({ title: "Current Host Status", animation: true, placement: "right", delay: { show: 300, hide: 100 } });
+            $('.monitoring_host_notify_checkbox').tooltip({ title: "Enable/Disable notifications for this host", animation: true, placement: "right", delay: { show: 300, hide: 100 } });
+            $('.monitoring_host_isenabled_checkbox').tooltip({ title: "Enable/Disable querying this Host", animation: true, placement: "right", delay: { show: 300, hide: 100 } });
+            $('.monitoring_host_details').tooltip({ title: "View host data CPU, mem, etc. and customize notification settings", animation: true, placement: "left", delay: { show: 300, hide: 100 } });
+            $('.monitoring_host_log').tooltip({ title: "Get Log for this host", animation: true, placement: "left", delay: { show: 300, hide: 100 } });
+            $('.removehosts_btn').tooltip({ title: "Delete this Host", animation: true, placement: "right", delay: { show: 300, hide: 100 } });
+            $('.newiphost').tooltip({ title: "Add new IP host", animation: true, placement: "bottom", delay: { show: 300, hide: 100 } });
+            $('.newwebhost').tooltip({ title: "Add new WebSite", animation: true, placement: "top", delay: { show: 300, hide: 100 } });
+            $('.searchtext').tooltip({ title: "Search by Hostname, IP or Host Description", animation: true, placement: "top", delay: { show: 300, hide: 100 } });
+            $('.group_button').tooltip({ animation: true, placement: "right", delay: { show: 1000, hide: 300 } });
+            $('.group_button_selected').tooltip({ animation: true, placement: "right", delay: { show: 1000, hide: 300 } });
+            $('.monitoring_host_selectpic').tooltip({ title: "Select host picture", animation: true, placement: "top", delay: { show: 300, hide: 100 } });
+        })
+
+    </script>
+}
