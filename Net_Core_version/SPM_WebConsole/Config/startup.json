@@ -1,0 +1,12 @@
+{
+  "_comment": "This is a JSON configuration file for SPM Monitoring WebConsole Self Hosting TCP configuration. Look at startup.json.readme.txt for more info",
+  "ListenHTTP": true,
+  "ListenHTTP_URI": "Any",
+  "HttpPort": 80,
+  "ListenHTTPS": false,
+  "ListenHTTPS_URI": "Any",
+  "HttpsPort": 443,
+  "ProvideSSLCert": false,
+  "CertificatePath": "c:/Users/user/Documents/MyCertFolder/my_cert.pfx",
+  "CertificatePassword": "my_pfx_password",
+}

@@ -37,12 +37,12 @@
     </nav>
 
     <div class="body-content">
-
         @RenderBody()
-        <footer class="footer">
-            <p>&copy; @DateTime.Now.Year - SPM Web Console</p>
-        </footer>
     </div>
+    <div style="clear:both;" />
+    <footer class="spmfooter">
+        <p>&copy; @DateTime.Now.Year - SPM Web Console</p>
+    </footer>
 
     @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/jquery")
@@ -216,7 +216,7 @@
 
         //Check is number in a text field or not
         //Accept 1 or 2 arguments. If call with 1 arg - then is value, if call with 2 args - then 1st is a value, 2nd - is a html element.
-        function CheckInt() { 
+        function CheckInt() {
             if (arguments.length === 1) {
                 let value = arguments[0];
                 if ((value.toString() === parseInt(value, 10).toString()) && value >= 0 && value <= 99999) {
@@ -240,10 +240,10 @@
                     return false;
                 }
             }
-            
+
         }
 
-    
+
     </script>
 
     @RenderSection("scripts", required: false)

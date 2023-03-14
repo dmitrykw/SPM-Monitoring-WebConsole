@@ -8,6 +8,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Config\config.cfg" />
+    <None Remove="Config\startup.json.readme.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Config\config.cfg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="bootstrap" Version="5.2.3" />
     <PackageReference Include="jQuery-Timepicker-Addon" Version="1.6.3" />
     <PackageReference Include="jQuery.UI" Version="1.12.1.1" />
@@ -17,5 +28,24 @@
   <ItemGroup>
     <Folder Include="Models\Reports\" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Config\startup.json.readme.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="Config\startup.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <Target Name="Copywwwroot" BeforeTargets="Build">
+    <ItemGroup>
+      <FolderToCopy Include="wwwroot\**" />
+    </ItemGroup>
+    <Copy SourceFiles="@(FolderToCopy)" DestinationFolder="$(OutputPath)\wwwroot\%(RecursiveDir)" />
+  </Target>
 
 </Project>

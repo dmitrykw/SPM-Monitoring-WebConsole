@@ -42,8 +42,8 @@
     </div>
 </div>
     <div id="readonly_mode_word"><h3>@((Model.IsReadOnly == true) ? "ReadOnly Mode" : "")</h3></div>
-    <div>               
-        <div class="controls" id="@(Model.Groups.Count > 12 ? "btns_absolute": "btns_fixed")">
+    <div>
+    <div class="controls" id="@(Model.Groups.Count > 12 ? "btns_absolute": "btns_absolute")">
             <div style="float:left">
             @using (Html.BeginForm("AddHost", "Monitoring", FormMethod.Post, new { enctype = "multipart/form-data" }))
             {
@@ -67,7 +67,7 @@
             }
             </div>
         </div>
-        <div class="controls"name="GroupsList" id="@(Model.Groups.Count > 12 ? "groups_absolute": "groups_fixed")">
+    <div class="controls" name="GroupsList" id="@(Model.Groups.Count > 12 ? "groups_absolute": "groups_absolute")">
             <div style="text-align:center; color:#a1a1a3">
                 <h3><b>@Model.GroupsHeader</b></h3>
             </div>

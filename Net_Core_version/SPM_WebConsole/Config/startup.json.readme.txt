@@ -1,0 +1,16 @@
+Parameters for SPM Monitoring WebConsole Self Hosting TCP configuration file
+
+  "ListenHTTP": true/false - Listen HTTP protocol or not
+
+  "ListenHTTP_URI": "Any"/"Loopback"/"Your IP" - (Any - Connection from Any IPs, Loopback - Only from localhost(127.0.0.1), Your IP - your network adapter IP (for example to limit connection from some concrete network adapter))
+
+  "HttpPort": 80 - TCP port for HTTP connections
+
+  "ListenHTTPS": true/false - Listen HTTPS protocol or not
+
+  "ListenHTTPS_URI": "Any"/"Loopback"/Your IP - (Any - Connection from Any IPs, Loopback - Only from localhost(127.0.0.1), Your IP - your network adapter IP (for example to limit connection from some concrete network adapter))
+
+  "HttpsPort": 443 - TCP port for HTTPS connections
+  "ProvideSSLCert": true/false - For HTTPS you need to provide SSL certificate. Must be true.
+  "CertificatePath": "c:/Users/user/Documents/MyCertFolder/my_cert.pfx" - Path to your ssl cert. Syntax is important. Slashes must be ('/').
+  "CertificatePassword": "my_pfx_password" - your cert password provided when you created .pfx file.

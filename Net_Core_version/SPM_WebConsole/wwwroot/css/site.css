@@ -40,16 +40,12 @@ input[type=text]:disabled {
 }
 
 
-
 .tooltip-wide, .tooltip.bottom, .tooltip-inner {
     width: auto; /* ширина подсказки */
     max-width: none; /* максимальная ширина подсказки (по умолчанию 200px) */    
     white-space: nowrap;
     z-index:999;
 }
-
-
-
 
 
 a.mylogo {
@@ -60,10 +56,13 @@ a.mylogo {
     height: 63px;
     text-indent: -9999px; /* hides the link text */
 }
-.footer {    
-    color: #a1a1a3;        
-    padding-left:30px;
-    padding-right:30px
+.spmfooter {
+    color: #a1a1a3;
+    padding-left: 30px;
+    padding-right: 30px;
+    text-align: right;
+    height:25px;   
+    margin-bottom:10px;
 }
 
 
@@ -72,6 +71,7 @@ a.mylogo {
     margin-right:45px;
     color: #a1a1a3
 }
+
 
 /* Set width on the form input elements since they're 100% wide by default */
 input,

@@ -66,7 +66,7 @@ namespace SPM_WebClient.Controllers
 
         public ActionResult Search(string search_filter)
         {
-            if (search_filter != "")
+            if (!string.IsNullOrEmpty(search_filter))
             {
                 MonitoringViewModel viewModel = new MonitoringViewModel(search_filter, true);
                 return GetView(viewModel);

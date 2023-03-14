@@ -60,10 +60,13 @@ a.mylogo {
     height: 63px;
     text-indent: -9999px; /* hides the link text */
 }
-.footer {
-    float: right;
+.spmfooter {
     color: #a1a1a3;
-    margin-top:50px
+    padding-left: 30px;
+    padding-right: 30px;
+    text-align: right;
+    height: 25px;
+    margin-bottom: 10px;
 }
 
 
