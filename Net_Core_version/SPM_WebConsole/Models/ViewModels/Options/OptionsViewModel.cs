@@ -2,7 +2,7 @@
 {
     public class OptionsViewModel
     {
-        public Settings Settings = new Settings();
+        public Settings Settings = new();
 
 
         public bool IsReadOnly { get { return App_Globals.IsReadOnly; } }
@@ -20,7 +20,7 @@
 
         private void FillSettings()
         {
-            Spm_Api_Processor spm_api_processor = new Spm_Api_Processor(App_Globals.Url, App_Globals.ApiKey);
+            var spm_api_processor = new Spm_Api_Processor(App_Globals.Url, App_Globals.ApiKey);
 
             try
             {
@@ -42,10 +42,10 @@
         {
             if (IsReadOnly) { return; }
 
-            Spm_Api_Processor spm_api_processor = new Spm_Api_Processor(App_Globals.Url, App_Globals.ApiKey);
+            var spm_api_processor = new Spm_Api_Processor(App_Globals.Url, App_Globals.ApiKey);
             try
             { spm_api_processor.SendSettingsUpdate(input_data); }
-            catch (Exception ex) { throw ex; }
+            catch { throw; }
         }
 
     }

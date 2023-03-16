@@ -17,7 +17,7 @@ namespace SPM_WebConsole.Models.ViewModels.Reports
             {
                 foreach (var item in ICMPStats)
                 {
-                    if (item.Key != null & item.Value != null)
+                    if (item.Value != null)
                     {
                         string pointDTString;
                         if (item.Key.Day == dt_now.Day && item.Key.Month == dt_now.Month && item.Key.Year == dt_now.Year)
