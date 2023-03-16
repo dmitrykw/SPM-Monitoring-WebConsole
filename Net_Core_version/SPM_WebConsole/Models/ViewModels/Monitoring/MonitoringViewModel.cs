@@ -139,10 +139,10 @@ namespace SPM_WebConsole.Models.ViewModels.Monitoring
 
                 ApiIsAvailable = true;
             }
-            catch
+            catch(Exception ex)
             {
                 ApiIsAvailable = false;
-                ConnectionErrorHeader = "You have API connection error. Check API configuration file (Config\\config.cfg).";
+                ConnectionErrorHeader = App_Globals.ApiConnectioErrorText + " " + ex.Message;
             }
         }
 
@@ -155,10 +155,10 @@ namespace SPM_WebConsole.Models.ViewModels.Monitoring
                 Hosts = spm_api_processor.GetHosts(search_filter, is_search);
                 ApiIsAvailable = true;
             }
-            catch
+            catch (Exception ex)
             {
                 ApiIsAvailable = false;
-                ConnectionErrorHeader = "You have API connection error. Check API configuration file (Config\\config.cfg).";
+                ConnectionErrorHeader = App_Globals.ApiConnectioErrorText + " " + ex.Message;
             }
         }
 
@@ -170,10 +170,10 @@ namespace SPM_WebConsole.Models.ViewModels.Monitoring
                 Hosts = spm_api_processor.GetHosts(id);
                 ApiIsAvailable = true;
             }
-            catch
+            catch (Exception ex)
             {
                 ApiIsAvailable = false;
-                ConnectionErrorHeader = "You have API connection error. Check API configuration file (Config\\config.cfg).";
+                ConnectionErrorHeader = App_Globals.ApiConnectioErrorText + " " + ex.Message;
             }
 
         }
@@ -186,10 +186,10 @@ namespace SPM_WebConsole.Models.ViewModels.Monitoring
                 Groups = spm_api_processor.GetGroups();
                 ApiIsAvailable = false;
             }
-            catch
+            catch (Exception ex)
             {
                 ApiIsAvailable = false;
-                ConnectionErrorHeader = "You have API connection error. Check API configuration file (Config\\config.cfg).";
+                ConnectionErrorHeader = App_Globals.ApiConnectioErrorText + " " + ex.Message;
             }
         }
 

@@ -1,0 +1,7 @@
+Parameters for SPM Monitoring WebConsole Connection to SPM Monitoring API
+
+  "api_hostname": API URL with port (example http://localhost:4539)
+
+  "api_key": API Encription Key. From SPM Monitoring Options.
+
+  "readonly": true/false - Make this Webconsole is Readonly. Only view data, without modification.

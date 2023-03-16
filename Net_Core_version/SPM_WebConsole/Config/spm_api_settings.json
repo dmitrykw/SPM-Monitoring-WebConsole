@@ -1,0 +1,6 @@
+{
+  "_comment": "This is a JSON configuration file for SPM Monitoring WebConsole connection to SPM Monitoring system. Look at spm_api_settings.json.readme.txt for more info",
+  "api_hostname": "http://localhost:4539",
+  "api_key": "SItqxWKBi7rrtzcuaJv3bc8qjw71KFilA7jTySn3amQjzqx3fS86AUpjPrLzTMyRSS",  
+  "readonly": false  
+}

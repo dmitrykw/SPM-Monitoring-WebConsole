@@ -4,7 +4,8 @@ using System.Net;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Configuration.AddJsonFile("Config\\startup.json");
+builder.Configuration.AddJsonFile("Config/startup.json");
+builder.Configuration.AddJsonFile("Config/spm_api_settings.json");
 
 
 bool _listenHTTP = builder.Configuration.GetValue<bool>("ListenHTTP");

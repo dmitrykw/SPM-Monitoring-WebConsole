@@ -66,10 +66,9 @@ a.mylogo {
 }
 
 
-#readonly_mode_word {
-    float: right;
+#readonly_mode_word {    
     margin-right:45px;
-    color: #a1a1a3
+    color: darkred;
 }
 
 

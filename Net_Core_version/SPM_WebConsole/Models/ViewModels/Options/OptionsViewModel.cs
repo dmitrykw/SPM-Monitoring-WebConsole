@@ -27,10 +27,10 @@
                 Settings = spm_api_processor.GetSettings();
                 ApiIsAvailable = true;
             }
-            catch
+            catch (Exception ex)
             {
                 ApiIsAvailable = false;
-                ConnectionErrorHeader = "You have API connection error. Check API configuration file (Config\\config.cfg).";
+                ConnectionErrorHeader = App_Globals.ApiConnectioErrorText + " " + ex.Message;
             }
 
 

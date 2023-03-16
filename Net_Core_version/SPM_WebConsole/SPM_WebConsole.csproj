@@ -23,13 +23,8 @@
 
   <ItemGroup>
     <None Remove="Config\config.cfg" />
+    <None Remove="Config\spm_api_settings.readme.txt" />
     <None Remove="Config\startup.json.readme.txt" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="Config\config.cfg">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
 
   <ItemGroup>
@@ -44,6 +39,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="Config\spm_api_settings.readme.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Config\startup.json.readme.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -65,6 +63,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Update="Config\spm_api_settings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Update="Config\startup.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

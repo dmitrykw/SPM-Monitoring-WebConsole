@@ -94,7 +94,7 @@ namespace SPM_WebConsole.Controllers
                 }
                 catch (Exception ex)
                 {
-                    reportsViewModel = new ReportsViewModel(reportHosts) { ApiIsAvailable = false, ConnectionErrorHeader = "You have API connection error. Check API configuration file (Config\\config.cfg)." + ex.Message };
+                    reportsViewModel = new ReportsViewModel(reportHosts) { ApiIsAvailable = false, ConnectionErrorHeader = App_Globals.ApiConnectioErrorText + " " + ex.Message };
                 }
 
                 return View(reportsViewModel);
