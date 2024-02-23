@@ -231,7 +231,8 @@ namespace SPM_WebConsole.Models
                     new KeyValuePair<string, dynamic>("isEnabledCustomEmail", model.isenabledcustomemail),
                     new KeyValuePair<string, dynamic>("Custom_Email", model.customemail),
                     new KeyValuePair<string, dynamic>("HostDependentOn", model.hostdepending),
-                    new KeyValuePair<string, dynamic>("Custom_UseSNMP", model.isenabledsnmp)
+                    new KeyValuePair<string, dynamic>("Custom_UseSNMP", model.isenabledsnmp),
+                    new KeyValuePair<string, dynamic>("Custom_EnabledSNMPTriggersRestoreNotify", model.isenabledsnmptriggersrestorenotify)
                 };
 
 

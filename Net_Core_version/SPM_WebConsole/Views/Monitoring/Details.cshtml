@@ -258,6 +258,15 @@
                     <div style="float:left"><input type="checkbox" id="isenabledsnmp" name="isenabledsnmp" class="form-check-input mt-2" checked="@Model.HostCustomOptions.Where(x => x.Key == "Custom_UseSNMP").FirstOrDefault().Value" onclick="updateCustomFields(this.form);" /></div>
                     <div style="width:300px" class="isenabledsnmp"><label class="groupbox">Use SNMP Notifications</label></div>
                 </p>
+
+                <div id="snmpsettingsdiv">
+                    <ul type="none" style="padding:0; margin-left:10px">
+                        <li>
+                            <div style="float:left"><input type="checkbox" id="isenabledsnmptriggersrestorenotify" name="isenabledsnmptriggersrestorenotify" class="form-check-input mt-2" checked="@Model.HostCustomOptions.Where(x => x.Key == "Custom_EnabledSNMPTriggersRestoreNotify").FirstOrDefault().Value" onclick="updateCustomFields(this.form);" /></div>
+                            <div class="isenabledsnmptriggersrestorenotify" style="width:320px"><label class="groupbox">Enable SNMP Triggers Restore Notifications</label></div>
+                        </li>
+                    </ul>
+                </div>
             </div>
 
         </form>
@@ -316,6 +325,7 @@
         if ($("#isenabledcustomnotificationsettings").is(":checked")) { $("#agentitemsdiv").show(); } else { $("#agentitemsdiv").hide(); }
         if ($("#isenabledcustomothernotificationsettings").is(":checked")) { $("#otheritemsdiv").show(); } else { $("#otheritemsdiv").hide(); }
         if ($("#isenabledcustomemail").is(":checked")) { $("#emailitemsdiv").show(); } else { $("#emailitemsdiv").hide(); }
+        if ($("#isenabledsnmp").is(":checked")) { $("#snmpsettingsdiv").show(); } else { $("#snmpsettingsdiv").hide(); }
 
         //Set fields to readonly
         if ($("#customagentnotifyifcpuisoverload").is(":checked")) { $("#customagentcpuoverloadpercent").prop("readonly", false) } else { $("#customagentcpuoverloadpercent").prop("readonly", true); }
@@ -386,6 +396,7 @@
         if ($("#isenabledhostdepending").is(":checked")) { dataToPost.hostdepending = myform.elements["hostdepending"].value; } else { dataToPost.hostdepending = "-"; }
 
         dataToPost.isenabledsnmp = myform.elements["isenabledsnmp"].checked;
+        dataToPost.isenabledsnmptriggersrestorenotify = myform.elements["isenabledsnmptriggersrestorenotify"].checked;
 
         dataToPost.notifyonmonday = $("#isenabledcustomscheduling").is(":checked") ? myform.elements["notifyonmonday"].checked : false;
         dataToPost.notifyontuesday = $("#isenabledcustomscheduling").is(":checked") ? myform.elements["notifyontuesday"].checked : false;
@@ -433,6 +444,7 @@
         $('.isenabledhostdepending').tooltip({ title: "Check this if this host dependent of another one. This option can disable notifications for depended hosts (if this hosts are behind the router for example).", animation: true, placement: "top", delay: { show: 300, hide: 100 } });
         $('.hostdepending').tooltip({ title: "Put here the hostname of master host on which this host depends (such a router for example)", animation: true, placement: "top", delay: { show: 300, hide: 100 } });
         $('.isenabledsnmp').tooltip({ title: "Request SNMP metrics for this host by its OIDs", animation: true, placement: "top", delay: { show: 300, hide: 100 } });
+        $('.isenabledsnmptriggersrestorenotify').tooltip({ title: "Notification when trigger value get back to reference value", animation: true, placement: "top", delay: { show: 300, hide: 100 } });        
         $('.isenabledcustomscheduling').tooltip({ title: "Use custom notification sсheduling instead common scheduling from options", animation: true, placement: "top", delay: { show: 300, hide: 100 } });
         $('#weekdaylabeldiv').tooltip({ title: "Turn on/off notification for weekdays", animation: true, placement: "top", delay: { show: 300, hide: 100 } });
         $('#notifyonmonday').tooltip({ title: "Turn on/off the notifications on Monday", animation: true, placement: "top", delay: { show: 300, hide: 100 } });

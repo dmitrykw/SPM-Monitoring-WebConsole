@@ -44,6 +44,7 @@
         public string hostdepending { get; set; }
 
         public bool? isenabledsnmp { get; set; }
+        public bool? isenabledsnmptriggersrestorenotify { get; set; }
 
         public bool? notifyonmonday { get; set; }
         public bool? notifyontuesday { get; set; }
