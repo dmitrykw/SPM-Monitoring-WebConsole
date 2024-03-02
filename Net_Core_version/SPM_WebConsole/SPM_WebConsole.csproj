@@ -6,19 +6,19 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <ApplicationIcon>wwwroot\favicon.ico</ApplicationIcon>
     <OutputType>Exe</OutputType>
-    <Version>1.2.0.1</Version>
+    <Version>1.2.1.1</Version>
     <Title>SPM Monitoring system Web Console</Title>
     <Description>Web Console for SPM Monitoring system remote administration</Description>
-    <Copyright>Copyright Dmitry Koziakov © 2023</Copyright>
+    <Copyright>Copyright Renkti Software © 2024</Copyright>
     <PackageProjectUrl>https://spm-monitoring.com</PackageProjectUrl>
     <PackageIcon>apple-touch-icon.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryUrl>https://github.com/dmitrykw/SPM-Monitoring-WebConsole</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>SPM</PackageTags>
-    <FileVersion>1.2.0.1</FileVersion>
+    <FileVersion>1.2.1.1</FileVersion>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <AssemblyVersion>1.2.0.1</AssemblyVersion>
+    <AssemblyVersion>1.2.1.1</AssemblyVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -28,7 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="bootstrap" Version="5.2.3" />
+    <PackageReference Include="bootstrap" Version="5.3.3" />
     <PackageReference Include="jQuery-Timepicker-Addon" Version="1.6.3" />
     <PackageReference Include="jQuery.UI" Version="1.12.1.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />

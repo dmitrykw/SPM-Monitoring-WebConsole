@@ -1,2 +1,6 @@
 dotnet publish -c Release -r win-x64 /p:PublishSingleFile=true
 dotnet publish -c Release -r linux-x64 /p:PublishSingleFile=true
+
+архивация линуксовой папк в tar.gz из под git bash for windows
+cd /c/Users/renkt/Projects/SPM-Monitoring-WebConsole/Net_Core_version/SPM_WebConsole/bin/Release/net6.0/linux-x64/publish/
+tar -cvzf SPM-Monitoring_Web-Console_v1.2.1.1_SelfHosted_Linux.tar.gz SPM_WebConsole
